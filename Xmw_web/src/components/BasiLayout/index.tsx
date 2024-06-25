@@ -25,7 +25,7 @@ import {
 	appList, avatarProps,
 	EventSourceNotice,
 	LockScreenModal,
-	LockSleep
+	LockSleep,
 } from './components'
 
 const { Paragraph } = Typography;

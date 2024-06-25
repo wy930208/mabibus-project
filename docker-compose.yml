@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: admin-database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wy930208
+      MYSQL_DATABASE: mamibus
+      MYSQL_USER: wy
+      MYSQL_PASSWORD: wy930208
+      TZ: Asia/Shanghai
+    expose:
+      - "3306"
+    ports:
+      - "3307:3306"
+
+  admin-front:
+    build: ./Xmw_web
+    container_name: admin-web
+    ports:
+      - "80:80"
+
+  redis:
+    image: redis:latest
+    container_name: admin-redis
+    restart: always
+    expose:
+      - "6379"
+    ports:
+      - "6378:6379"
+    environment:
+      TZ: Asia/Shanghai
+
+  admin-server:
+    build: ./Xmw_server
+    container_name: admin-server
+    # restart: always
+    ports:
+      - "3000:6688"
+    links:
+      - redis
+      - mysql
+    depends_on:
+      - mysql
+      - redis

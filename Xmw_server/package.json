@@ -31,6 +31,7 @@
     "@nestjs/sequelize": "^10.0.0",
     "@nestjs/swagger": "^7.1.13",
     "ali-oss": "^6.18.1",
+    "axios": "^1.7.2",
     "cache-manager": "^5.2.4",
     "cache-manager-redis-store": "^3.0.1",
     "chalk": "4.1.2",

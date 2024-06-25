@@ -14,8 +14,12 @@ import { AnnouncementModule } from '@/modules/administrative/announcement/announ
 import { JobsManagementModule } from '@/modules/administrative/jobs-management/jobs-management.module'; // 智能行政-岗位管理
 import { OrganizationModule } from '@/modules/administrative/organization/organization.module'; // 智能行政-组织管理
 import { AuthModule } from '@/modules/auth/auth.module'; // 用户鉴权
+import { CouponsModule } from '@/modules/coupons/coupons.module';
+import { CustomerCommentModule } from '@/modules/customer/comment/comment.module';
+import { CustomerModule } from '@/modules/customer/information/customer.module';
 import { FilesModule } from '@/modules/files/files.module'; // 文件上传
 import { RedisCacheModule } from '@/modules/redis-cache/redis-cache.module'; // redis 缓存
+import { StoreModule } from '@/modules/store/store.module';
 import { InternationalModule } from '@/modules/system/international/international.module'; // 系统设置-国际化
 import { MenuManagementModule } from '@/modules/system/menu-management/menu-management.module'; // 系统设置-菜单管理
 import { OperationLogsModule } from '@/modules/system/operation-logs/operation-logs.module'; // 系统设置-操作日志
@@ -53,6 +57,10 @@ import RedisConfig from './config/redis'; // redis配置
     AuthModule,
     RedisCacheModule,
     AnnouncementModule,
+    StoreModule,
+    CustomerModule,
+    CouponsModule,
+    CustomerCommentModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

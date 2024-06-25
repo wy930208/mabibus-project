@@ -32,6 +32,7 @@ const debounceError = debounce((content: string, duration = 3) => {
  */
 const umiRequest: RequestConfig = {
   baseURL: BASEURL.API, // 请求前缀
+
   timeout: 30 * 1000, // 超时时间，默认 30 s
   // 错误处理： umi@3 的错误处理方案。
   errorConfig: {
@@ -131,6 +132,8 @@ const umiRequest: RequestConfig = {
     ],
   ],
 }
+
+console.log('====BASEURL.API,====', BASEURL.API)
 
 /**
  * @description: 导出封装的请求方法

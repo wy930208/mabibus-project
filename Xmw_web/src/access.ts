@@ -27,7 +27,9 @@ export default function access(initialState: InitialStateTypes | undefined) {
   }
   return {
     // 判断是否有操作权限
-    operationPermission: (data: string) => Permissions ? Permissions.includes(data) : false,
+    operationPermission: (data: string) => {
+      return Permissions ? Permissions.includes(data) : false
+    },
     // 判断是否有权限访问菜单
     adminRouteFilter: (route: any) => {
       const allRouteNames = getRouteNames()

@@ -28,7 +28,7 @@ export class OperationLogsService {
     // 使用 InjectModel 注入参数，注册数据库实体
     @InjectModel(XmwLogs)
     private readonly logsModel: typeof XmwLogs,
-  ) { }
+  ) {}
 
   /**
    * @description: 保存操作日志

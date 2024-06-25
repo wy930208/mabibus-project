@@ -28,7 +28,8 @@ export enum REQUEST_METHODS {
  * @author: 白雾茫茫丶
  */
 export enum BASEURL {
-  API = '/api'
+  // API = '/api'
+  API = 'http://localhost:3000/v1'
 }
 
 /**
@@ -60,6 +61,7 @@ export enum ROUTES {
   ROLEMANAGEMENT = '/system/role-management', // 系统设置-角色管理
   INTERNATIONALIZATION = '/system/internationalization', // 系统设置-国际化
   OPERATIONLOG = '/system/operation-log', // 系统设置-操作日志
+  STORE_MANAGEMENT = '/store/list' // 店铺管理
 }
 
 /**

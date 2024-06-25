@@ -23,7 +23,7 @@ const Settings: LayoutSettings & {
   fixedHeader: true,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Xmw Admin',
+  title: '妈咪巴士',
   pwa: false,
   logo: '/logo.svg',
   iconfontUrl: '/favicon.ico',

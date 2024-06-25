@@ -5,7 +5,6 @@ import {
   ForeignKey,
   Is,
   IsDate,
-  IsEmail,
   IsIn,
   IsIP,
   IsUrl,
@@ -28,12 +27,12 @@ import type { UserAttributes } from '@/utils/types/system';
 @Table({ tableName: 'xmw_user' })
 export class XmwUser
   extends Model<UserAttributes, UserAttributes>
-  implements UserAttributes {
+  implements UserAttributes
+{
   @IsUUID(4)
   @PrimaryKey
   @Column({
     type: DataType.UUID,
-    allowNull: false,
     defaultValue: DataType.UUIDV4,
     comment: '用户id',
   })
@@ -70,13 +69,10 @@ export class XmwUser
   @Max(120)
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,
     comment: '年龄',
   })
   age: number;
 
-  //电子邮箱
-  @IsEmail
   @Column({
     type: DataType.STRING(50),
     comment: '电子邮箱',

@@ -7,7 +7,7 @@
  * @LastEditTime: 2023-10-25 15:35:42
  */
 import { PicCenterOutlined, ReloadOutlined, VerticalLeftOutlined, VerticalRightOutlined } from '@ant-design/icons'
-import { FormattedMessage, useIntl } from '@umijs/max';
+import { FormattedMessage, useIntl, useParams } from '@umijs/max';
 import { App, Dropdown, MenuProps, Space, Tabs, TabsProps } from 'antd';
 import { eq, keys, last } from 'lodash-es'
 import { FC, MutableRefObject, ReactNode, useCallback } from 'react'
@@ -46,6 +46,9 @@ const TabsLayout: FC<TabsLayoutProps> = ({
   const { formatMessage } = useIntl();
   // hooks 调用
   const { message } = App.useApp();
+
+  const params = useParams();
+
   /**
    * @description: 点击菜单回调
    */
@@ -74,6 +77,7 @@ const TabsLayout: FC<TabsLayoutProps> = ({
     icon,
     key: key,
   })
+
   const menuItems: MenuProps['items'] = [
     // 重新加载
     renderMenuItem(TABSLAYOUT.REFRESH, <ReloadOutlined />),
@@ -91,11 +95,14 @@ const TabsLayout: FC<TabsLayoutProps> = ({
    */
   const tabsItems: TabsProps['items'] = keys(keepElements.current).map(
     (pathname: string) => {
+      const regexString = Object.values(params).map((v) => `\\b/${v}\\b`).join('|'); // 使用 \b 边界匹配确保精确匹配
+      const regex = new RegExp(regexString, 'gi');
+      const i18nKey = pathname.replace(regex, '');
       // 只有当前活跃的标签页才能操作
       const dom = (
         <Space size={0}>
           <IconFont type={`icon-${last(pathname.split('/'))}`} />
-          <FormattedMessage id={`menu${pathname.replaceAll('/', '.')}`} />
+          <FormattedMessage id={`menu${i18nKey.replaceAll('/', '.')}`} />
         </Space>
       )
       return {

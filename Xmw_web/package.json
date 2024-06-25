@@ -52,6 +52,7 @@
   ],
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
+    "@ant-design/compatible": "^5.1.3",
     "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-components": "^2.6.32",
     "@ant-design/use-emotion-css": "1.0.4",
@@ -59,6 +60,7 @@
     "antd": "^5.10.2",
     "antd-img-crop": "^4.13.0",
     "classnames": "^2.3.2",
+    "compatible": "link:@types/@ant-design/compatible",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.10",
     "element-china-area-data": "^6.1.0",
@@ -68,6 +70,7 @@
     "rc-menu": "^9.12.2",
     "react": "^18.2.0",
     "react-quill": "^2.0.0",
+    "xlsx": "^0.18.5",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {

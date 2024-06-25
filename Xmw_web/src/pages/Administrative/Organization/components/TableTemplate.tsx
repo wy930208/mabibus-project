@@ -87,17 +87,6 @@ const TableTemplate: FC = () => {
 			render: (text) => <Tag color={randomTagColor()}>{text}</Tag>,
 		},
 		{
-			title: formatMessage({ id: formatPerfix(ROUTES.ORGANIZATION, 'org_logo') }),
-			dataIndex: 'org_logo',
-			valueType: {
-				type: 'image',
-				width: 60,
-			},
-			align: 'center',
-			hideInSearch: true,
-			width: 120,
-		},
-		{
 			title: formatMessage({ id: formatPerfix(ROUTES.ORGANIZATION, 'org_type') }),
 			dataIndex: 'org_type',
 			filters: true,

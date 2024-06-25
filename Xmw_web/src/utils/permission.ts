@@ -58,4 +58,11 @@ export default {
       delete: 'system:internationalization:delete', // 删除
     },
   },
-}
+  store: {
+    list: {
+      add: 'store:list:add', // 新建
+      edit: 'store:list:edit', // 编辑
+      delete: 'store:list:delete', // 删除
+    },
+  },
+};

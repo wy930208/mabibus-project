@@ -15,7 +15,7 @@ import { OperationLogsService } from './operation-logs.service'; // OperationLog
 
 @Controller('system/operation-log')
 export class OperationLogsController {
-  constructor(private readonly operationLogsService: OperationLogsService) { }
+  constructor(private readonly operationLogsService: OperationLogsService) {}
   /**
    * @description: 获取用户管理列表
    * @author: 白雾茫茫丶
