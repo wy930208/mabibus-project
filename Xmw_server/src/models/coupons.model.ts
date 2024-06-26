@@ -43,11 +43,17 @@ export class Coupons extends Model<any> {
   @Column({
     type: DataType.FLOAT({ decimals: 2 }),
     defaultValue: 0,
-    allowNull: false,
     comment: '卡券金额',
   })
   amount: number;
 
+  @Min(0)
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+    comment: '使用次数',
+  })
+  times: number;
   // //角色状态
   @IsIn({
     args: [['fix', 'flex']],

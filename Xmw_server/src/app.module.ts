@@ -15,6 +15,7 @@ import { JobsManagementModule } from '@/modules/administrative/jobs-management/j
 import { OrganizationModule } from '@/modules/administrative/organization/organization.module'; // 智能行政-组织管理
 import { AuthModule } from '@/modules/auth/auth.module'; // 用户鉴权
 import { CouponsModule } from '@/modules/coupons/coupons.module';
+import { MembersCouponsModule } from '@/modules/coupons/members-coupons/members-coupons.module';
 import { CustomerCommentModule } from '@/modules/customer/comment/comment.module';
 import { CustomerModule } from '@/modules/customer/information/customer.module';
 import { FilesModule } from '@/modules/files/files.module'; // 文件上传
@@ -61,6 +62,7 @@ import RedisConfig from './config/redis'; // redis配置
     CustomerModule,
     CouponsModule,
     CustomerCommentModule,
+    MembersCouponsModule,
   ],
 })
 export class AppModule {}

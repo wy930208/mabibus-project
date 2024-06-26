@@ -28,8 +28,8 @@ export enum REQUEST_METHODS {
  * @author: 白雾茫茫丶
  */
 export enum BASEURL {
-  // API = '/api'
-  API = 'http://localhost:3000/v1'
+  API = '/api'
+  // API = 'http://localhost:3000/v1'
 }
 
 /**

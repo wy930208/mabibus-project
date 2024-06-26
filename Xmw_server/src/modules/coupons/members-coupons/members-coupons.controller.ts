@@ -1,0 +1,46 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+
+import { CreateMembersCouponDto } from './dto/create-members-coupon.dto';
+import { UpdateMembersCouponDto } from './dto/update-members-coupon.dto';
+import { MembersCouponsService } from './members-coupons.service';
+
+@Controller('members-coupons')
+export class MembersCouponsController {
+  constructor(private readonly membersCouponsService: MembersCouponsService) {}
+
+  @Post()
+  create(@Body() createMembersCouponDto: CreateMembersCouponDto) {
+    return this.membersCouponsService.create(createMembersCouponDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.membersCouponsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.membersCouponsService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateMembersCouponDto: UpdateMembersCouponDto,
+  ) {
+    return this.membersCouponsService.update(+id, updateMembersCouponDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.membersCouponsService.remove(+id);
+  }
+}
