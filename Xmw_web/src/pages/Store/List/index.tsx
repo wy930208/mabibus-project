@@ -103,14 +103,12 @@ const StoreManagement: FC = () => {
         const id = form.getFieldValue('id')
         const msgPrix = id ? '更新' : '创建';
 
-
         if (id) {
           await updateStore({ id, ...values });
         } else {
           await createStore(values);
         }
-
-
+        
         message.success(`${msgPrix}成功`);
         setVisible(false);
         tableRef.current?.reload();

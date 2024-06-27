@@ -21,16 +21,12 @@ const DistributeCouponsModal: FC<Props> = (props) => {
 
   const { data = [], loading } = useRequest(() => getCustomerList({ deal: 1 }));
 
-  console.log('====data====', data)
-
   const customerOpt = useMemo(() => {
-    return data?.map(item => ({
+    return data?.map((item: { id: string; user_name: string; }) => ({
       value: item.id,
       label: item.user_name
     }))
-  }, [])
-
-  console.log('===list===', data);
+  }, [data]);
 
   return <ModalForm loading={loading} form={form} {...otherProps}>
     <ProFormText
@@ -45,11 +41,12 @@ const DistributeCouponsModal: FC<Props> = (props) => {
       mode='multiple'
       label="发放对象"
       options={customerOpt}
+      // required
     />
     <ProFormDigit
       label="发放数量"
-      initialValue={1}
-      name="times"
+      rules={[{ required: true, message: '请输入发放数量' }]}
+      name="quantity"
     />
   </ModalForm>
 }

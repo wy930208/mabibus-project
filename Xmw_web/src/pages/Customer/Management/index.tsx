@@ -33,7 +33,7 @@ const CustomerManagement: FC = () => {
   const { data: storeList = [] } = useRequest(getStoreList, {
     formatResult(resp) {
       return resp.data.map((o: { id: string; store_name: string; }) => ({ value: o.id, label: o.store_name }));
-    }
+    },
   });
 
   const tableRef = useRef<ActionType>();
@@ -55,7 +55,7 @@ const CustomerManagement: FC = () => {
         dataIndex: 'store_id',
         valueEnum: storeList.reduce((acc: { [x: string]: { text: string; }; }, item: (typeof storeList)[number]) => {
           acc[item.value] = {
-            text: item.label
+            text: item.label,
           }
           return acc;
         }, {}),
@@ -127,8 +127,8 @@ const CustomerManagement: FC = () => {
           },
         },
         dataIndex: 'status',
-        render: (value) => {
-          const enabled = value === 1;
+        render: (_, record) => {
+          const enabled = record.status === 1;
           return <Tag style={{ margin: 0 }} color={enabled ? 'green' : 'red'} >{enabled ? '启用' : '禁用'}</Tag>
         },
       },

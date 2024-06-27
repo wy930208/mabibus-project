@@ -84,8 +84,9 @@ const UploadImage: FC<UploadImageProps> = ({
    * @author: 白雾茫茫丶
    */
   const beforeUpload = (file: RcFile) => {
+    console.log('===.type====', file)
     // 获取限制的图片类型，默认全部
-    const accept = get(fieldProps, 'accept', 'image/*')
+    const accept = ['image/jpeg', 'image/png', 'image/jpg']
     // 判断类型是否正确
     const isFileType = accept.includes(file.type)
     // 图片大小限制

@@ -4,6 +4,7 @@ import {
   Column,
   DataType,
   ForeignKey,
+  IsDate,
   IsIn,
   IsUUID,
   Model,
@@ -40,7 +41,7 @@ export class MembersCoupons extends Model<any> {
   coupons_id: string;
 
   @Column({
-    type: DataType.DECIMAL(10, 2),
+    type: DataType.INTEGER,
     comment: '余额',
   })
   balance: number;
@@ -62,6 +63,19 @@ export class MembersCoupons extends Model<any> {
     comment: '核销状态（0:未核销，1：已核销，2：部分核销）',
   })
   status;
+
+  @IsDate
+  @Column({
+    type: DataType.DATE,
+    comment: '过期时间',
+  })
+  expire_time?: Date;
+
+  @Column({
+    type: DataType.UUID,
+    comment: '组织ID',
+  })
+  orgId: string;
 
   @IsUUID(4)
   @ForeignKey(() => Store)

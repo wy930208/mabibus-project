@@ -64,14 +64,11 @@ export class XmwUser
   @Column({ type: DataType.STRING(20), comment: '英文名' })
   en_name?: string;
 
-  //年龄
-  @Min(1)
-  @Max(120)
   @Column({
     type: DataType.INTEGER,
     comment: '年龄',
   })
-  age: number;
+  age?: number;
 
   @Column({
     type: DataType.STRING(50),

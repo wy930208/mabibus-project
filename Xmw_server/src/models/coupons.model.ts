@@ -41,7 +41,7 @@ export class Coupons extends Model<any> {
 
   @Min(0)
   @Column({
-    type: DataType.FLOAT({ decimals: 2 }),
+    type: DataType.INTEGER,
     defaultValue: 0,
     comment: '卡券金额',
   })
@@ -54,7 +54,7 @@ export class Coupons extends Model<any> {
     comment: '使用次数',
   })
   times: number;
-  // //角色状态
+
   @IsIn({
     args: [['fix', 'flex']],
     msg: 'expire_type 字段值错误',
@@ -66,7 +66,6 @@ export class Coupons extends Model<any> {
   })
   expire_type: string;
 
-  //上次到店时间
   @IsDate
   @Column({
     type: DataType.DATE,
@@ -74,7 +73,6 @@ export class Coupons extends Model<any> {
   })
   beginTime?: Date;
 
-  //上次到店时间
   @IsDate
   @Column({
     type: DataType.DATE,
@@ -105,6 +103,12 @@ export class Coupons extends Model<any> {
     comment: '备注',
   })
   remark: string;
+
+  @Column({
+    type: DataType.UUID,
+    comment: '组织ID',
+  })
+  orgId: string;
 
   //角色状态
   @IsIn({

@@ -122,11 +122,6 @@ const UserInformation: FC<UserInformationProps> = ({
 				fieldProps={{
 					options: regionData,
 				}}
-				rules={[{
-					required: true,
-					message: formatMessage({ id: INTERNATION.PLACEHOLDER_SELETED }) +
-						formatMessage({ id: formatPerfix(ROUTES.USERMANAGEMENT, 'city') }),
-				}]}
 			/>
 			{/* 详细地址 */}
 			<ProFormTextArea
@@ -137,9 +132,8 @@ const UserInformation: FC<UserInformationProps> = ({
 				fieldProps={{
 					showCount: true,
 					maxLength: 200,
-					rows: 4,
+					rows: 2,
 				}}
-				rules={[{ required: true }]}
 			/>
 			{/* 人物标签 */}
 			{

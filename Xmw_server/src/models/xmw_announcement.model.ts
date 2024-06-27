@@ -19,7 +19,8 @@ import { AnnouncementAttributes } from '@/utils/types/administrative';
 @Table({ tableName: 'xmw_announcement' })
 export class XmwAnnouncement
   extends Model<AnnouncementAttributes, AnnouncementAttributes>
-  implements AnnouncementAttributes {
+  implements AnnouncementAttributes
+{
   @IsUUID(4)
   @PrimaryKey
   @ForeignKey(() => XmwAlready)

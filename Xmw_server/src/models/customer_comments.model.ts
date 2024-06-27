@@ -44,6 +44,12 @@ export class CustomerComments extends Model<any> {
   @Column({ type: DataType.UUID, allowNull: false, comment: '评论者ID' })
   from_uid: string;
 
+  @Column({
+    type: DataType.UUID,
+    comment: '组织ID',
+  })
+  orgId: string;
+
   @BelongsTo(() => Customer, { as: 'c' })
   customerInfo: Customer;
 

@@ -139,18 +139,6 @@ const PersonalInformation: FC<{ disabledField?: boolean }> = ({ disabledField = 
 			<ProFormSort colProps={{ span: 12 }} />
 			{/* 状态 */}
 			<ProFormStatus colProps={{ span: 12 }} />
-			{/* 用户名称 */}
-			<ProFormText
-				name="motto"
-				colProps={{ span: 24 }}
-				label={formatMessage({ id: formatPerfix(ROUTES.USERMANAGEMENT, 'motto') })}
-				placeholder={formatMessage({ id: INTERNATION.PLACEHOLDER }) +
-					formatMessage({ id: formatPerfix(ROUTES.USERMANAGEMENT, 'motto') })}
-				fieldProps={{
-					showCount: true,
-					maxLength: 32,
-				}}
-			/>
 		</>
 	)
 }

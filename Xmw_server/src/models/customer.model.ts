@@ -155,6 +155,12 @@ export class Customer extends Model<any> {
   })
   last_visit_store_time?: Date;
 
+  @Column({
+    type: DataType.UUID,
+    comment: '组织ID',
+  })
+  orgId: string;
+
   //下次预计到店时间
   @IsDate
   @Column({

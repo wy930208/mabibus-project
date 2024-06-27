@@ -4,32 +4,35 @@ import {
   ProColumns,
   ProTable,
 } from '@ant-design/pro-components'
-import { Link, useRequest } from '@umijs/max';
-import { Button, Space } from 'antd';
+import { useRequest } from '@umijs/max';
+import { Button, message, Space, Typography } from 'antd';
+import dayjs from 'dayjs';
 import { FC, useMemo, useRef, useState } from 'react';
 
 import DropdownMenu from '@/components/DropdownMenu';
 import { columnScrollX, CreateButton, operationColumn } from '@/components/TableColumns';
-import { deleteCustomer } from '@/services/customer';
+import { createCoupons, createMembersCoupons, deleteCoupons, fetchCoupons, updateCoupons } from '@/services/coupons';
 import { getStoreList } from '@/services/store';
 import { ROUTES } from '@/utils/enums';
-import { fetchCoupons } from '@/services/coupons';
+
 import CouponsFormModal from './components/CouponsFormModal';
-import { CouponsTypeNameMap } from './constants';
 import DistributeCouponsModal from './components/DistributeCouponsModal';
+import { CouponsTypeNameMap } from './constants';
 
 const CouponsList: FC = () => {
   const [visible, setVisible] = useState(false);
   const [couponsModalVisible, setCouponsModalVisible] = useState(false);
 
-
   const { data: storeList = [] } = useRequest(getStoreList, {
     formatResult(resp) {
       return resp.data.map((o: { id: string; store_name: string; }) => ({ value: o.id, label: o.store_name }));
-    }
+    },
   });
 
-  const [initFromValue, setInitFromValue] = useState();
+  // 当前操作的数据
+  const [currentRecord, setCurrentRecord] = useState<{
+    id: string;
+  }>();
 
   const tableRef = useRef<ActionType>();
 
@@ -52,7 +55,7 @@ const CouponsList: FC = () => {
         align: 'center',
         render(_, record) {
           return CouponsTypeNameMap[record.coupon_type]
-        }
+        },
       },
       {
         title: '有效期',
@@ -63,10 +66,10 @@ const CouponsList: FC = () => {
         render(_, record) {
           if (record.expire_type === 'fix') {
             return <Space direction="vertical"><span>{record.beginTime}</span><span>{record.endTime}</span></Space>;
-          } else {
-            return `领取${record.expireDay}后天过期`
           }
-        }
+          return <span>领取后 <Typography.Text type='warning'>{record.expireDay} </Typography.Text>天过期</span>
+
+        },
       },
 
       {
@@ -83,20 +86,20 @@ const CouponsList: FC = () => {
           return <Space size={20}>
             <Button size="small" onClick={() => {
               setCouponsModalVisible(true);
-              setInitFromValue(record)
+              setCurrentRecord(record)
             }} key="detail">发券</Button>
             <DropdownMenu
               key="opt"
               pathName={ROUTES.STORE_MANAGEMENT}
               editCallback={() => {
-                setInitFromValue({
+                setCurrentRecord({
                   ...record,
-                  expireTimeRange: [record.beginTime, record.endTimes]
+                  expireTimeRange: [record.beginTime, record.endTimes],
                 });
                 setVisible(true);
               }}
               deleteParams={{
-                request: deleteCustomer,
+                request: deleteCoupons,
                 id: record.id,
               }}
               reloadTable={() => tableRef.current?.reload()}
@@ -111,17 +114,23 @@ const CouponsList: FC = () => {
     return fetchCoupons()
   }
 
+  const onCreateCoupon = () => {
+    setCurrentRecord(undefined);
+    setVisible(true);
+  }
+
   return <PageContainer header={{ title: null }}>
     <ProTable
+      rowKey="id"
       actionRef={tableRef}
       request={fetchTableData}
       columns={columns}
-      // 工具栏
       toolBarRender={() => [
         <CreateButton
           key="create"
           pathName={ROUTES.STORE_MANAGEMENT}
-          callback={() => { setVisible(true) }} />,
+          callback={onCreateCoupon}
+        />,
       ]}
       scroll={{ x: columnScrollX(columns) }}
     />
@@ -129,21 +138,26 @@ const CouponsList: FC = () => {
       title="卡券管理"
       width={500}
       open={visible}
-      initialValues={initFromValue}
-      modalProps={{
-        onCancel: () => setVisible(false),
-      }}
+      initialValues={currentRecord}
       onFinish={async (values) => {
-        // const id = form.getFieldValue('id');
-        // const msgPrix = id ? '更新' : '创建';
-        // if (id) {
-        //   await updateCustomer({ id, ...values });
-        // } else {
-        //   await createCustomer(values);
-        // }
-        // message.success(`${msgPrix}成功`);
-        // setVisible(false);
-        // tableRef.current?.reload();
+        const { expireTimeRange, ...payload } = values;
+        if (expireTimeRange) {
+          payload.beginTime = dayjs(expireTimeRange[0]).startOf('milliseconds');
+          payload.endTime = dayjs(expireTimeRange[1]).endOf('milliseconds');
+        }
+
+        const msgPrix = currentRecord ? '更新' : '新建';
+        if (currentRecord) {
+          await updateCoupons({
+            id: currentRecord.id,
+            ...payload,
+          });
+        } else {
+          await createCoupons(payload);
+        }
+        message.success(`${msgPrix}成功`);
+        setVisible(false);
+        tableRef.current?.reload();
       }}
       modalProps={{
         destroyOnClose: true,
@@ -153,10 +167,16 @@ const CouponsList: FC = () => {
     />
     <DistributeCouponsModal
       modalProps={{
+        destroyOnClose: true,
         onCancel: () => setCouponsModalVisible(false),
       }}
-      initialValues={initFromValue}
-      onFinish={async () => {
+      initialValues={currentRecord}
+      onFinish={async (values) => {
+        await createMembersCoupons({
+          ...values,
+          coupon_id: currentRecord?.id,
+        });
+        message.success('发券成功');
         setCouponsModalVisible(false);
       }} open={couponsModalVisible} />
   </PageContainer>

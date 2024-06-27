@@ -33,7 +33,7 @@ export class UserManagementService {
     @InjectModel(XmwUser)
     private readonly userModel: typeof XmwUser,
     private readonly operationLogsService: OperationLogsService,
-  ) { }
+  ) {}
 
   /**
    * @description: 获取用户管理列表
@@ -196,7 +196,8 @@ export class UserManagementService {
     // 根据主键查找出当前数据
     const currentInfo = await this.userModel.findByPk(user_id);
     await this.operationLogsService.saveLogs(
-      `更新用户[${currentInfo.user_name}]状态：${{ 0: '禁用', 1: '正常' }[status]
+      `更新用户[${currentInfo.user_name}]状态：${
+        { 0: '禁用', 1: '正常' }[status]
       }`,
     );
     return responseMessage(result);

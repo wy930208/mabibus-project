@@ -86,7 +86,7 @@ export type UserAttributes = {
   password: string; // 密码(加密)
   cn_name: string; // 中文名
   en_name?: string; // 英文名
-  age: number; // 年龄
+  age?: number; // 年龄
   email?: string; // 电子邮箱
   phone: string; // 电话号码
   avatar_url?: string; // 用户头像

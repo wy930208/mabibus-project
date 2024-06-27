@@ -36,13 +36,12 @@ export class CustomerService {
       };
     }
 
-    console.log('111', where);
-
     const result = await this.customerModel.findAll({
       attributes: {
         include: ['s.store_name'],
       },
       where,
+      order: [['created_time', 'desc']],
       // 联表查询
       include: [
         {

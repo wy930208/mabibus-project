@@ -19,5 +19,19 @@ export default {
       component: './Coupons/List',
       exact: true,
     },
+    {
+      path: '/coupons/members',
+      name: 'members',
+      // access: 'adminRouteFilter',
+      component: './Coupons/Members',
+      exact: true,
+    },
+    {
+      path: '/coupons/write-off',
+      name: 'write-off',
+      // access: 'adminRouteFilter',
+      component: './Coupons/WriteOff',
+      exact: true,
+    },
   ],
 };

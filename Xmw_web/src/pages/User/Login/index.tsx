@@ -143,7 +143,6 @@ const LoginPage: FC = () => {
           <LoginForm
             logo={<img alt="logo" src="/logo.svg" />}
             title={initialState?.Settings?.title}
-            subTitle={formatMessage({ id: formatPerfix(ROUTES.LOGIN, 'subtitle') })}
             submitter={{
               submitButtonProps: {
                 loading: loginLoading,

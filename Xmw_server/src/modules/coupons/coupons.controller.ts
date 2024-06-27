@@ -3,10 +3,13 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Post,
+  Query,
+  Session,
 } from '@nestjs/common';
+
+import { SessionTypes } from '@/utils/types';
 
 import { CouponsService } from './coupons.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
@@ -17,27 +20,31 @@ export class CouponsController {
   constructor(private readonly couponsService: CouponsService) {}
 
   @Post()
-  create(@Body() createCouponDto: CreateCouponDto) {
-    return this.couponsService.create(createCouponDto);
+  create(
+    @Body() createCouponDto: CreateCouponDto,
+    @Session() session: SessionTypes,
+  ) {
+    return this.couponsService.create(createCouponDto, session);
   }
 
   @Get()
-  findAll() {
+  findAll(@Session() session: SessionTypes) {
+    console.log('===session====', session.currentUserInfo);
     return this.couponsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.couponsService.findOne(+id);
+  @Get()
+  findOne(@Query('id') id: string) {
+    return this.couponsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCouponDto: UpdateCouponDto) {
-    return this.couponsService.update(+id, updateCouponDto);
+  @Patch()
+  update(@Body() updateCouponDto: UpdateCouponDto) {
+    return this.couponsService.update(updateCouponDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete()
+  remove(@Body() { id }: { id: string }) {
     return this.couponsService.remove(+id);
   }
 }

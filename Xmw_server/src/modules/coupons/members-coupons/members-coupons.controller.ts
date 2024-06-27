@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 
 import { CreateMembersCouponDto } from './dto/create-members-coupon.dto';
@@ -22,8 +23,8 @@ export class MembersCouponsController {
   }
 
   @Get()
-  findAll() {
-    return this.membersCouponsService.findAll();
+  findAll(@Query('id') id: string) {
+    return this.membersCouponsService.findAll(+id);
   }
 
   @Get(':id')
@@ -31,12 +32,9 @@ export class MembersCouponsController {
     return this.membersCouponsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateMembersCouponDto: UpdateMembersCouponDto,
-  ) {
-    return this.membersCouponsService.update(+id, updateMembersCouponDto);
+  @Patch()
+  update(@Body() dto: UpdateMembersCouponDto) {
+    return this.membersCouponsService.update(dto);
   }
 
   @Delete(':id')

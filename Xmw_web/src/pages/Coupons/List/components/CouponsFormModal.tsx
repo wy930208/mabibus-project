@@ -1,15 +1,16 @@
-import { FC, useState } from "react";
-import { ModalForm, ProFormDateRangePicker, ProFormDigit, ProFormRadio, ProFormSelect, ProFormText, ModalFormProps } from "@ant-design/pro-components";
+import { ModalForm, ModalFormProps, ProFormDateRangePicker, ProFormDigit, ProFormRadio, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Form, message, Space, Tag } from 'antd';
-import { CouponsTypeNameMap } from "../constants";
+import { FC, useState } from 'react';
+
+import { CouponsTypeNameMap } from '../constants';
 
 type Props = ModalFormProps & {
   storeList: { value: string; label: string }[]
 }
 
-const selectOpt = Object.keys(CouponsTypeNameMap).map(key => ({
+const selectOpt = Object.keys(CouponsTypeNameMap).map((key) => ({
   value: key,
-  label: CouponsTypeNameMap[key]
+  label: CouponsTypeNameMap[key],
 }))
 
 const CouponsFormModal: FC<Props> = (props) => {
@@ -20,7 +21,7 @@ const CouponsFormModal: FC<Props> = (props) => {
 
   const [formValue, setFromValue] = useState(otherProps.initialValues);
 
-  return <ModalForm form={form} {...otherProps} onValuesChange={(value, values,) => {
+  return <ModalForm form={form} {...otherProps} onValuesChange={(value, values) => {
     setFromValue(values)
   }}>
     <ProFormText
@@ -32,10 +33,13 @@ const CouponsFormModal: FC<Props> = (props) => {
     <ProFormSelect
       name="coupon_type"
       label="卡券类型"
+      rules={[{ required: true, message: '请选择类型' }]}
       options={selectOpt}
     />
     {formValue?.coupon_type === 'prepaid' && <ProFormDigit
       label="卡券面额"
+      required
+      rules={[{ required: true, message: '金额不能为空' }]}
       name="amount"
     />}
     {formValue?.coupon_type === 'times' && <ProFormDigit
@@ -64,6 +68,7 @@ const CouponsFormModal: FC<Props> = (props) => {
       name="expireDay"
     />}
     <ProFormSelect
+      name="applicable_stores"
       label="适用店铺"
       mode="multiple"
       options={storeList}
@@ -73,7 +78,6 @@ const CouponsFormModal: FC<Props> = (props) => {
       label="备注"
     />
     <ProFormRadio.Group
-      initialValue={1}
       label="状态"
       name="status"
       options={[{

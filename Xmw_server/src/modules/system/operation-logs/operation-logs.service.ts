@@ -1,11 +1,3 @@
-/*
- * @Description: OperationLogs Service
- * @Version: 2.0
- * @Author: 白雾茫茫丶
- * @Date: 2022-12-12 10:11:05
- * @LastEditors: 白雾茫茫丶
- * @LastEditTime: 2023-09-28 17:41:04
- */
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/sequelize';
