@@ -23,7 +23,7 @@ const Settings: LayoutSettings & {
   fixedHeader: true,
   fixSiderbar: true,
   colorWeak: false,
-  title: '妈咪巴士',
+  title: 'Mommy Bus',
   pwa: false,
   logo: '/logo.svg',
   iconfontUrl: '/favicon.ico',

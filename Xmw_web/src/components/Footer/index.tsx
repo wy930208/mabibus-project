@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   return (
     <DefaultFooter
       style={{ background: 'none' }}
-      copyright={`${currentYear} 妈咪巴士`}
+      copyright={`${currentYear} Mommy Bus`}
       className={styles['global-footer']}
     />
   );

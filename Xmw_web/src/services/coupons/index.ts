@@ -46,3 +46,8 @@ export const writeOffMemberCoupons = (data: any) =>
  * @returns
  */
 export const deleteMemberCoupon = (id: string) => httpRequest.delete(`/members-coupons/${id}`);
+
+/**
+ * @description: 获取会员卡券日志
+ */
+export const fetchCouponsMembersLogs = () => httpRequest.get<string[]>('/members-coupons/logs');

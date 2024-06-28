@@ -1,11 +1,3 @@
-/*
- * @Description: 入口文件-全局 layout 配置
- * @Version: 2.0
- * @Author: 白雾茫茫丶
- * @Date: 2022-09-19 20:39:53
- * @LastEditors: 白雾茫茫丶
- * @LastEditTime: 2023-10-19 15:47:21
- */
 import { ProConfigProvider, SettingDrawer, Settings as LayoutSettings } from '@ant-design/pro-components';
 import { history, InitDataType, Link, RunTimeLayoutConfig } from '@umijs/max';
 import { useBoolean } from 'ahooks'
@@ -22,7 +14,7 @@ import {
 	ActionButtons,
 	actionsRender,
 	AnnouncementDetail,
-	appList, avatarProps,
+	avatarProps,
 	EventSourceNotice,
 	LockScreenModal,
 	LockSleep,
@@ -105,7 +97,7 @@ export const BasiLayout: RunTimeLayoutConfig = ({ initialState, setInitialState 
 			setInitialState((s: InitialStateTypes) => ({ ...s, Collapsed: collapsed }));
 		},
 		// 跨站点导航列表
-		appList,
+		// appList,
 		// 增加一个 loading 的状态
 		childrenRender: (children) => {
 			return (

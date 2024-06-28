@@ -33,5 +33,12 @@ export default {
       component: './Coupons/WriteOff',
       exact: true,
     },
+    {
+      path: '/coupons/logs',
+      name: 'coupon.logs',
+      // access: 'adminRouteFilter',
+      component: './Coupons/Logs',
+      exact: true,
+    },
   ],
 };

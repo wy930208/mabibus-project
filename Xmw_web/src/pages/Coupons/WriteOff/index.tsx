@@ -15,9 +15,7 @@ const CouponsWriteOff: FC = () => {
   const { state } = useLocation() as { state: { write_off_code: string, id: string; } };
   const [code, setCode] = useState(state?.write_off_code);
 
-  const { data, loading, refresh } = useRequest(() => fetchCouponsMembersCoupons(state?.id))
-
-  console.log('====da====', data)
+  const { data, loading, refresh } = useRequest(() => fetchCouponsMembersCoupons(state?.id));
 
   const onCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCode(e.target.value);

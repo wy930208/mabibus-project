@@ -2,7 +2,7 @@
  * loading 占位
  * 解决首次加载时白屏的问题
  */
-(function () {
+(function() {
   const _root = document.querySelector('#root');
   if (_root && _root.innerHTML === '') {
     _root.innerHTML = `
@@ -190,7 +190,7 @@
 </div>
 </div>
 <div style="display: flex; align-items: center; justify-content: center;font-size: 40px;font-weight: bold">
-Xmw Admin
+Mommy Bus 管理后台
 </div>
 </div>
 </div>

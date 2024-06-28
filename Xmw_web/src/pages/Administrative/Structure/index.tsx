@@ -1,11 +1,3 @@
-/*
- * @Description: 组织架构
- * @Version: 2.0
- * @Author: 白雾茫茫丶
- * @Date: 2022-09-24 11:16:36
- * @LastEditors: Cyan
- * @LastEditTime: 2023-07-10 14:54:44
- */
 import { NodeData, OrganizationGraph } from '@ant-design/charts';
 import { PageContainer } from '@ant-design/pro-components'
 import { useRequest } from 'ahooks'
@@ -48,7 +40,7 @@ const Structure: FC = () => {
 	const data = {
 		id: '1',
 		value: {
-			name: 'Xmw Admin',
+			name: 'Mommy Bus',
 		},
 		children: orgList,
 	}

@@ -8,12 +8,10 @@ import {
   ProFormDigit,
   ProFormMoney,
   ProFormRadio,
-  ProFormSelect,
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components'
-import { Link, useRequest } from '@umijs/max';
-// import { useRequest } from 'ahooks'
+import { Link } from '@umijs/max';
 import { Form, message, Space, Tag } from 'antd';
 import dayjs from 'dayjs'
 import { FC, useMemo, useRef, useState } from 'react';
@@ -21,7 +19,6 @@ import { FC, useMemo, useRef, useState } from 'react';
 import DropdownMenu from '@/components/DropdownMenu';
 import { columnScrollX, CreateButton, operationColumn } from '@/components/TableColumns';
 import { createCustomer, deleteCustomer, getCustomerList, updateCustomer } from '@/services/customer';
-import { getStoreList } from '@/services/store';
 import { ROUTES } from '@/utils/enums';
 
 const CustomerManagement: FC = () => {
@@ -29,12 +26,6 @@ const CustomerManagement: FC = () => {
   const [form] = Form.useForm<{
     [x: string]: any; name: string; company: string
   }>();
-
-  const { data: storeList = [] } = useRequest(getStoreList, {
-    formatResult(resp) {
-      return resp.data.map((o: { id: string; store_name: string; }) => ({ value: o.id, label: o.store_name }));
-    },
-  });
 
   const tableRef = useRef<ActionType>();
 
@@ -52,15 +43,8 @@ const CustomerManagement: FC = () => {
         title: '所属店铺',
         width: 200,
         align: 'center',
-        dataIndex: 'store_id',
-        valueEnum: storeList.reduce((acc: { [x: string]: { text: string; }; }, item: (typeof storeList)[number]) => {
-          acc[item.value] = {
-            text: item.label,
-          }
-          return acc;
-        }, {}),
-        valueType: 'select',
-        render: (_, record) => record.store_name,
+        dataIndex: 'org_name',
+        search: false,
       },
       {
         title: '联系方式',
@@ -164,7 +148,7 @@ const CustomerManagement: FC = () => {
         },
       },
     ]
-  }, [form, storeList]);
+  }, [form]);
 
   const fetchTableData = async (params: any) => {
     return getCustomerList({ deal: 1, ...params })
@@ -226,13 +210,6 @@ const CustomerManagement: FC = () => {
         label="家庭地址"
         placeholder="请输入家庭地址"
       />
-      <ProForm.Group>
-        <ProFormSelect
-          options={storeList}
-          name="store_id"
-          label="所属店铺"
-        />
-      </ProForm.Group>
       <ProFormText
         colProps={{ span: 24 }}
         name="email"

@@ -19,7 +19,6 @@ import {
   personalCenter,
   setting,
   store,
-  technicalDocument,
 } from './router';
 export default [
   {
@@ -36,7 +35,6 @@ export default [
   dashboard,
   administrative,
   personalCenter,
-  technicalDocument,
   setting,
   customer,
   store,
