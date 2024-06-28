@@ -48,7 +48,7 @@ export class CustomerComments extends Model<any> {
     type: DataType.UUID,
     comment: '组织ID',
   })
-  orgId: string;
+  org_id: string;
 
   @BelongsTo(() => Customer, { as: 'c' })
   customerInfo: Customer;

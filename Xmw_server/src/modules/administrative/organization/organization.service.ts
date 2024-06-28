@@ -25,7 +25,7 @@ export class OrganizationService {
     @InjectModel(XmwOrganization)
     private readonly organizationModel: typeof XmwOrganization,
     private readonly operationLogsService: OperationLogsService,
-  ) { }
+  ) {}
 
   /**
    * @description: 获取组织管理列表
@@ -152,5 +152,27 @@ export class OrganizationService {
       `删除组织：${currentInfo.org_name}`,
     );
     return responseMessage(result);
+  }
+
+  /**
+   * 获取当前组织及子级组织
+   * @param org_id
+   * @returns
+   */
+  async getSelfAndChildrenOrgId(org_id: string): Promise<string[]> {
+    const idList = [org_id];
+
+    const result = await this.organizationModel.findAll({
+      raw: true,
+      attributes: ['org_id'],
+      where: {
+        parent_id: { [Op.eq]: org_id },
+      },
+    });
+
+    result?.forEach((item) => {
+      idList.push(item.org_id);
+    });
+    return idList;
   }
 }

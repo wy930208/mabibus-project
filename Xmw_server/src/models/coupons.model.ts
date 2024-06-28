@@ -1,9 +1,12 @@
 import {
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
+  ForeignKey,
   IsDate,
   IsIn,
+  IsUUID,
   Length,
   Min,
   Model,
@@ -11,11 +14,16 @@ import {
   Table,
 } from 'sequelize-typescript';
 
+import { XmwOrganization } from './xmw_organization.model';
+
 @Table({ tableName: 'coupons', comment: '卡券' })
 export class Coupons extends Model<any> {
-  @AutoIncrement
+  @IsUUID(4)
   @PrimaryKey
   @Column({
+    type: DataType.UUID,
+    allowNull: false,
+    defaultValue: DataType.UUIDV4,
     comment: '卡券ID',
   })
   id: number;
@@ -104,12 +112,6 @@ export class Coupons extends Model<any> {
   })
   remark: string;
 
-  @Column({
-    type: DataType.UUID,
-    comment: '组织ID',
-  })
-  orgId: string;
-
   //角色状态
   @IsIn({
     args: [[0, 1]],
@@ -122,4 +124,8 @@ export class Coupons extends Model<any> {
     comment: '状态（0:禁用，1：正常）',
   })
   status: number;
+
+  @IsUUID(4)
+  @Column({ type: DataType.UUID, comment: '所属组织id' })
+  orgId?: string;
 }

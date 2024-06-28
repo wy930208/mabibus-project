@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 
 import { Coupons } from '@/models/coupons.model';
+import { OrganizationService } from '@/modules/administrative/organization/organization.service';
 import { responseMessage } from '@/utils';
 import { SessionTypes } from '@/utils/types';
 
@@ -13,19 +15,30 @@ export class CouponsService {
   constructor(
     @InjectModel(Coupons)
     private readonly couponsModel: typeof Coupons,
+    private readonly organizationService: OrganizationService,
   ) {}
 
   async create(createCouponDto: any, session: SessionTypes) {
-    console.log('=====session====', session.currentUserInfo.org_id);
+    const orgId = session.currentUserInfo?.org_id;
+    if (!orgId) return responseMessage(null);
+
     const data = await this.couponsModel.create({
       ...createCouponDto,
-      orgId: session.currentUserInfo.org_id,
+      orgId: orgId,
     });
     return responseMessage(data);
   }
 
-  async findAll() {
+  async findAll(session: SessionTypes) {
+    const orgId = session.currentUserInfo?.org_id;
+    if (!orgId) return responseMessage([]);
+
+    const orgIdList =
+      await this.organizationService.getSelfAndChildrenOrgId(orgId);
     const data = await this.couponsModel.findAll({
+      where: {
+        org_id: { [Op.in]: orgIdList },
+      },
       order: [['created_time', 'desc']],
     });
     return responseMessage(data);

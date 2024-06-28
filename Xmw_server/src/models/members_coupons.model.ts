@@ -36,9 +36,10 @@ export class MembersCoupons extends Model<any> {
   })
   write_off_code: string;
 
+  @IsUUID(4)
   @ForeignKey(() => Coupons)
-  @Column({ type: DataType.INTEGER, allowNull: false, comment: '卡券 ID' })
-  coupons_id: string;
+  @Column({ type: DataType.UUID, allowNull: false, comment: '卡券 ID' })
+  coupons_id?: string;
 
   @Column({
     type: DataType.INTEGER,

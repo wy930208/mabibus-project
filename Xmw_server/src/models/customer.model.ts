@@ -17,8 +17,9 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Store } from '@/models/store.model';
 import type { Sex, Status } from '@/utils/types';
+
+import { XmwOrganization } from './xmw_organization.model';
 
 @Table({ tableName: 'customer', comment: '客户列表' })
 export class Customer extends Model<any> {
@@ -131,9 +132,9 @@ export class Customer extends Model<any> {
 
   //所属城市
   @IsUUID(4)
-  @ForeignKey(() => Store)
+  @ForeignKey(() => XmwOrganization)
   @Column({ type: DataType.UUID, comment: '所属门店 ID' })
-  store_id?: string;
+  org_id?: string;
 
   //详细地址
   @Column({ type: DataType.STRING(200), comment: '家庭地址' })
@@ -157,6 +158,7 @@ export class Customer extends Model<any> {
 
   @Column({
     type: DataType.UUID,
+    allowNull: false,
     comment: '组织ID',
   })
   orgId: string;
@@ -169,6 +171,6 @@ export class Customer extends Model<any> {
   })
   next_visit_store_time?: Date;
 
-  @BelongsTo(() => Store, { as: 's' })
-  storeInfo: Store;
+  @BelongsTo(() => XmwOrganization, { as: 'o' })
+  orgInfo: XmwOrganization;
 }

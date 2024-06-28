@@ -11,7 +11,7 @@ import {
 
 import { SessionTypes } from '@/utils/types';
 
-import { CouponsService } from './coupons.service';
+import { CouponsService } from '../coupon/coupons.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 
@@ -29,8 +29,7 @@ export class CouponsController {
 
   @Get()
   findAll(@Session() session: SessionTypes) {
-    console.log('===session====', session.currentUserInfo);
-    return this.couponsService.findAll();
+    return this.couponsService.findAll(session);
   }
 
   @Get()

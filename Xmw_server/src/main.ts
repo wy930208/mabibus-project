@@ -1,11 +1,3 @@
-/*
- * @Description: 应用程序的入口文件，它使用核心函数 NestFactory 来创建 Nest 应用程序的实例。
- * @Version: 2.0
- * @Author: 白雾茫茫丶
- * @Date: 2022-10-12 17:06:37
- * @LastEditors: 白雾茫茫丶
- * @LastEditTime: 2023-10-16 11:07:15
- */
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'; // swagger 接口文档
 import * as express from 'express';
@@ -13,7 +5,6 @@ import * as session from 'express-session';
 import { join } from 'path';
 
 import { HttpReqTransformInterceptor } from '@/interceptor/http-req.interceptor'; // 全局响应拦截器
-import { requestMiddleware } from '@/middleware/request.middleware'; // 全局请求拦截中间件
 import { ValidationPipe } from '@/pipe/validation.pipe'; // 参数校验
 import { Logger } from '@/utils/log4js';
 import type { Response } from '@/utils/types';
@@ -33,7 +24,10 @@ async function bootstrap() {
   app.use(logger); // 所有请求都打印日志
 
   // 启动cors跨域
-  app.enableCors();
+  app.enableCors({
+    credentials: true,
+    origin: ['http://localhost:8888'],
+  });
 
   // 配置 session
   app.use(
@@ -76,7 +70,8 @@ async function bootstrap() {
   SwaggerModule.setup(process.env.SWAGGER_SETUP_PATH, app, document);
   await app.listen(App_configuration().port, () => {
     Logger.info(
-      `服务已经启动,接口请访问:http://www.localhost:${App_configuration().port
+      `服务已经启动,接口请访问:http://www.localhost:${
+        App_configuration().port
       }`,
     );
   });

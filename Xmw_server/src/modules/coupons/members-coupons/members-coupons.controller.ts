@@ -7,7 +7,10 @@ import {
   Patch,
   Post,
   Query,
+  Session,
 } from '@nestjs/common';
+
+import { SessionTypes } from '@/utils/types';
 
 import { CreateMembersCouponDto } from './dto/create-members-coupon.dto';
 import { UpdateMembersCouponDto } from './dto/update-members-coupon.dto';
@@ -23,22 +26,25 @@ export class MembersCouponsController {
   }
 
   @Get()
-  findAll(@Query('id') id: string) {
-    return this.membersCouponsService.findAll(+id);
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.membersCouponsService.findOne(+id);
+  findAll(@Query('id') id: string, @Session() session: SessionTypes) {
+    return this.membersCouponsService.findAll(+id, session);
   }
 
   @Patch()
-  update(@Body() dto: UpdateMembersCouponDto) {
-    return this.membersCouponsService.update(dto);
+  update(
+    @Body() dto: UpdateMembersCouponDto,
+    @Session() session: SessionTypes,
+  ) {
+    return this.membersCouponsService.update(dto, session);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.membersCouponsService.remove(+id);
+  }
+
+  @Get('logs')
+  findWriteOffLog(@Session() session: SessionTypes) {
+    return this.membersCouponsService.findWriteOffLog(session);
   }
 }

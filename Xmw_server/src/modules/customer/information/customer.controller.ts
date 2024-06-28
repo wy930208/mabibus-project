@@ -7,7 +7,12 @@ import {
   Patch,
   Post,
   Query,
+  Session,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+import { SessionTypes } from '@/utils/types';
 
 import { CustomerService } from './customer.service';
 import { GetCustomerListDto } from './dto';
@@ -19,23 +24,43 @@ export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
-  create(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.customerService.create(createCustomerDto);
+  create(
+    @Body() createCustomerDto: CreateCustomerDto,
+    @Session() session: SessionTypes,
+  ) {
+    return this.customerService.create({
+      ...createCustomerDto,
+      orgId: session.currentUserInfo?.org_id,
+    });
   }
 
   @Post('bulk-create')
-  batchCreate(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.customerService.bulkCreate(createCustomerDto);
+  batchCreate(@Body() dto: any, @Session() session: SessionTypes) {
+    return this.customerService.bulkCreate(
+      dto.map((item) => {
+        return {
+          ...item,
+          orgId: session.currentUserInfo.org_id,
+        };
+      }),
+    );
   }
 
   @Get()
-  findAll(@Query() customerInfo: GetCustomerListDto) {
-    return this.customerService.findAll(customerInfo);
+  @UseGuards(AuthGuard('jwt'))
+  findAll(
+    @Query() customerInfo: GetCustomerListDto,
+    @Session() session: SessionTypes,
+  ) {
+    const orgId = session.currentUserInfo?.org_id;
+    return this.customerService.findAll(customerInfo, orgId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.customerService.findOne(id);
+  @UseGuards(AuthGuard('jwt'))
+  findOne(@Param('id') id: string, @Session() session: SessionTypes) {
+    const orgId = session.currentUserInfo?.org_id;
+    return this.customerService.findOne(id, orgId);
   }
 
   @Patch(':id')

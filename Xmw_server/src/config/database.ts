@@ -9,7 +9,6 @@
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('database', () => {
-  console.log('=====2333=====', process.env.DATABASE_HOST);
   return {
     dialect: 'mysql',
     host: process.env.DATABASE_HOST, // 这部分会和从env中进行合并
