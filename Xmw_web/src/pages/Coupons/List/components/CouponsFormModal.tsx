@@ -67,12 +67,12 @@ const CouponsFormModal: FC<Props> = (props) => {
       label="有效天数"
       name="expireDay"
     />}
-    <ProFormSelect
+    {/* <ProFormSelect
       name="applicable_stores"
       label="适用店铺"
       mode="multiple"
       options={storeList}
-    />
+    /> */}
     <ProFormText
       name="remark"
       label="备注"

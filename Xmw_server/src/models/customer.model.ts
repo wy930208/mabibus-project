@@ -183,12 +183,6 @@ export class Customer extends Model<any> {
   })
   will_purchase: Status;
 
-  @Column({
-    type: UUID,
-    comment: '服务门店',
-  })
-  service_store: Status;
-
   //上次到店时间
   @IsDate
   @Column({

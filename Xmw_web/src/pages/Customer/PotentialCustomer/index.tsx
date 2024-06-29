@@ -153,7 +153,7 @@ const PotentialCustomer: FC = () => {
   }, [form]);
 
   const fetchTableData = async (params: any) => {
-    return getCustomerList({ deal: 1, ...params })
+    return getCustomerList({ deal: 0, ...params })
   }
 
   const handleFile = (file: File) => {

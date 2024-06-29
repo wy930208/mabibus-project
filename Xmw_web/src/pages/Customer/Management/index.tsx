@@ -28,6 +28,8 @@ const CustomerManagement: FC = () => {
 
   const tableRef = useRef<ActionType>();
 
+  const [inactiveDate, setInactiveDate] = useState<string>();
+
   const columns: ProColumns<any>[] = useMemo(() => {
     return [
       {
@@ -51,12 +53,6 @@ const CustomerManagement: FC = () => {
         dataIndex: 'phone',
         copyable: true,
         ellipsis: true,
-      },
-      {
-        title: '邮箱',
-        align: 'center',
-        width: 200,
-        dataIndex: 'email',
       },
       {
         title: '地址',
@@ -91,6 +87,30 @@ const CustomerManagement: FC = () => {
         search: false,
       },
       {
+        title: <strong>长期未进店客户筛选</strong>,
+        dataIndex: 'inactiveDate',
+        hidden: true,
+        valueType: 'select',
+        request: async () => [
+          {
+            label: '一个月未进店',
+            value: dayjs().subtract(1, 'month').format('YYYY-MM-DD'),
+          },
+          {
+            label: '三个月未进店',
+            value: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+          },
+          {
+            label: '半年未进店',
+            value: dayjs().subtract(6, 'month').format('YYYY-MM-DD'),
+          },
+          {
+            label: '一年未进店',
+            value: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+          },
+        ],
+      },
+      {
         title: '下次预约到店时间',
         width: 180,
         align: 'center',
@@ -100,15 +120,7 @@ const CustomerManagement: FC = () => {
       {
         title: '状态',
         align: 'center',
-        valueType: 'select',
-        valueEnum: {
-          0: {
-            text: '禁止',
-          },
-          1: {
-            text: '启用',
-          },
-        },
+        search: false,
         dataIndex: 'status',
         render: (_, record) => {
           const enabled = record.status === 1;
@@ -158,6 +170,10 @@ const CustomerManagement: FC = () => {
       actionRef={tableRef}
       request={fetchTableData}
       columns={columns}
+      search={{
+        layout: 'vertical',
+        defaultCollapsed: false,
+      }}
       // 工具栏
       toolBarRender={() => [
         <CreateButton
@@ -232,7 +248,7 @@ const CustomerManagement: FC = () => {
           colProps={{ span: 12 }}
           name="last_visit_store_time"
           label="最近到店时间"
-          disabled
+        // disabled
         />
         <ProFormDateTimePicker
           colProps={{ span: 12 }}

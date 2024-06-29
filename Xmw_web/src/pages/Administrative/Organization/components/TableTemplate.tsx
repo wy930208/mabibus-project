@@ -120,10 +120,10 @@ const TableTemplate: FC = () => {
 			render: (_, record) => (
 				<DropdownMenu
 					pathName={ROUTES.ORGANIZATION}
-					addChildCallback={record.parent_id ? () => {
+					addChildCallback={() => {
 						form.setFieldValue('parent_id', record.org_id);
 						setOpenDrawerTrue();
-					} : undefined}
+					}}
 					editCallback={() => {
 						form.setFieldsValue(record);
 						setOpenDrawerTrue()

@@ -70,7 +70,11 @@ export class CustomerService {
         where.can_go_house = customerInfo.can_go_house;
       }
 
-      console.log('====customerInfo', customerInfo.can_go_house);
+      if (customerInfo.inactiveDate) {
+        where.last_visit_store_time = {
+          [Op.lt]: customerInfo.inactiveDate,
+        };
+      }
     }
 
     const list = await this.getOrgList(orgId);
@@ -79,6 +83,8 @@ export class CustomerService {
       ...where,
       // org_id: { [Op.in]: list },
     };
+
+    console.log('===where===', where);
 
     const result = await this.customerModel.findAll({
       attributes: {
