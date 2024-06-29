@@ -130,7 +130,7 @@ const CustomerManagement: FC = () => {
         align: 'center',
         render: (_, record) => {
           return <Space size={20}>
-            <Link to={`/customer/detail/${record.id}`} key="detail">详情</Link>
+            {/* <Link to={`/customer/detail/${record.id}`} key="detail">详情</Link> */}
             <DropdownMenu
               key="opt"
               pathName={ROUTES.STORE_MANAGEMENT}

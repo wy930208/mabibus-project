@@ -35,7 +35,7 @@ import RedisConfig from './config/redis'; // redis配置
   imports: [
     // 全局配置 Module
     ConfigModule.forRoot({
-      envFilePath: '.development.env', // 设置 .env 文件路径
+      envFilePath: `.${process.env.NODE_ENV}.env`, // 设置 .env 文件路径
       isGlobal: true,
       load: [App_globalConfig, DatabaseConfig, RedisConfig],
     }),

@@ -5,6 +5,9 @@ services:
     image: mysql:8.0
     container_name: admin-database
     restart: always
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./config/mysql:/etc/mysql/conf.d
     environment:
       MYSQL_ROOT_PASSWORD: wy930208
       MYSQL_DATABASE: mamibus

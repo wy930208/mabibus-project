@@ -19,11 +19,19 @@ import {
   createCustomer, deleteCustomer, getCustomerList, updateCustomer,
 } from '@/services/customer';
 import { ROUTES } from '@/utils/enums';
-import { Link } from '@umijs/max';
+
+import CustomerDetail from '../Detail'
 
 const PotentialCustomer: FC = () => {
   const [visible, setVisible] = useState(false);
+  const [logModalZVisible, setLogModalVisible] = useState(false);
+  const [record, setRecord] = useState();
+
   const [form] = Form.useForm<{
+    [x: string]: any; name: string; company: string
+  }>();
+
+  const [logFrom] = Form.useForm<{
     [x: string]: any; name: string; company: string
   }>();
 
@@ -71,7 +79,10 @@ const PotentialCustomer: FC = () => {
         width: 120,
         render: (_, record) => {
           return <Space size={20}>
-            <Link to={`/customer/detail/${record.id}`} key="detail">详情</Link>
+            <Button onClick={() => {
+              setRecord(record);
+              setLogModalVisible(true);
+            }} key="detail">跟踪</Button>
             <DropdownMenu
               key="opt"
               pathName={ROUTES.STORE_MANAGEMENT}
@@ -122,7 +133,7 @@ const PotentialCustomer: FC = () => {
     }
   }, []);
 
-  const { runAsync: fetchStoreList } = useRequest(() => getCustomerList({deal: 0}), { manual: true });
+  const { runAsync: fetchStoreList } = useRequest(() => getCustomerList({ deal: 0 }), { manual: true });
   return <PageContainer header={{ title: null }}>
     <ProTable
       actionRef={tableRef}
@@ -144,11 +155,21 @@ const PotentialCustomer: FC = () => {
       ]}
       scroll={{ x: columnScrollX(columns) }}
     />
+    {logModalZVisible && <CustomerDetail
+      title="跟踪记录"
+      width={500}
+      initialValues={record}
+      open={logModalZVisible}
+      onCancel={() => {
+        setLogModalVisible(false)
+      }}
+    />}
+
     <ModalForm
       title="新建潜在客户"
       width={500}
       grid
-      form={form}
+      form={logFrom}
       open={visible}
       onFinish={async (values) => {
         const id = form.getFieldValue('id')

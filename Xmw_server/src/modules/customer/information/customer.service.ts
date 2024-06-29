@@ -3,13 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op, type WhereOptions } from 'sequelize';
 
 import { Customer } from '@/models/customer.model';
-import { responseMessage } from '@/utils';
-
-import { GetCustomerListDto } from './dto';
 import { XmwOrganization } from '@/models/xmw_organization.model';
-
-// import { CreateCustomerDto } from './dto/create-customer.dto';
-// import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { responseMessage } from '@/utils';
 
 @Injectable()
 export class CustomerService {
@@ -25,8 +20,8 @@ export class CustomerService {
     return responseMessage(result);
   }
 
-  async bulkCreate(createCustomerDto: any) {
-    const result = await this.customerModel.bulkCreate(createCustomerDto);
+  async bulkCreate(dto: any) {
+    const result = await this.customerModel.bulkCreate(dto);
     return responseMessage(result);
   }
 
@@ -52,7 +47,7 @@ export class CustomerService {
     return list;
   }
 
-  async findAll(customerInfo?: GetCustomerListDto, orgId?: string) {
+  async findAll(customerInfo?: any, orgId?: string) {
     // 无法获取组织店铺的信息，直接返回
     if (!orgId) return responseMessage([]);
 
@@ -60,8 +55,15 @@ export class CustomerService {
     if (customerInfo) {
       where = {
         deal: { [Op.eq]: customerInfo.deal },
+        user_name: {
+          [Op.like]: `%${customerInfo?.user_name || ''}%`,
+        },
+        phone: {
+          [Op.like]: `%${customerInfo?.phone || ''}%`,
+        },
       };
     }
+
     const list = await this.getOrgList(orgId);
 
     where = {

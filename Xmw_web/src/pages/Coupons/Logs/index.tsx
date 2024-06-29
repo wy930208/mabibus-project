@@ -118,24 +118,24 @@ const CouponsLogs: FC = () => {
         width: 180,
         align: 'center',
       },
-      {
-        ...operationColumn,
-        width: 140,
-        align: 'center',
-        render: (_, record) => {
-          return <Space size={20}>
-            <Button
-              type="primary"
-              danger
-              size="small"
-              onClick={() => {
-                rollbackRecord(record);
-              }}
-              key="delete"
-            >撤回</Button>
-          </Space>
-        },
-      },
+      // {
+      //   ...operationColumn,
+      //   width: 140,
+      //   align: 'center',
+      //   render: (_, record) => {
+      //     return <Space size={20}>
+      //       <Button
+      //         type="primary"
+      //         danger
+      //         size="small"
+      //         onClick={() => {
+      //           rollbackRecord(record);
+      //         }}
+      //         key="delete"
+      //       >撤回</Button>
+      //     </Space>
+      //   },
+      // },
     ]
   }, []);
 

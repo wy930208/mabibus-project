@@ -6,7 +6,6 @@ import {
   Is,
   IsDate,
   IsIn,
-  IsIP,
   IsUrl,
   IsUUID,
   Length,
@@ -178,10 +177,8 @@ export class XmwUser
   })
   login_num: number;
 
-  //最后一次登录ip
-  @IsIP
   @Column({
-    type: DataType.STRING(20),
+    type: DataType.STRING(50),
     comment: '最后一次登录ip',
   })
   login_last_ip?: string;

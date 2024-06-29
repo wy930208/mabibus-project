@@ -40,6 +40,7 @@ export class CustomerController {
       dto.map((item) => {
         return {
           ...item,
+          deal: 0,
           orgId: session.currentUserInfo.org_id,
         };
       }),
