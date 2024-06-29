@@ -11,7 +11,6 @@ import {
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components'
-import { Link } from '@umijs/max';
 import { Form, message, Space, Tag } from 'antd';
 import dayjs from 'dayjs'
 import { FC, useMemo, useRef, useState } from 'react';

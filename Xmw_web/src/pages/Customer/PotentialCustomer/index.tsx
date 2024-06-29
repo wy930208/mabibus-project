@@ -7,25 +7,28 @@ import {
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components'
-import { useRequest } from 'ahooks'
-import { Button, Form, message, Space, Upload } from 'antd';
+import { Button, Form, message, Space, Switch, Upload } from 'antd';
 import { FC, useMemo, useRef, useState } from 'react';
 import { read as xlsxRead, utils as xlsxUtils } from 'xlsx';
 
 import DropdownMenu from '@/components/DropdownMenu';
 import { columnScrollX, CreateButton, operationColumn } from '@/components/TableColumns';
+import { createMembersCoupons } from '@/services/coupons';
 import {
   bulkCreateCustomer,
   createCustomer, deleteCustomer, getCustomerList, updateCustomer,
 } from '@/services/customer';
+import { formatResponse } from '@/utils';
 import { ROUTES } from '@/utils/enums';
 
 import CustomerDetail from '../Detail'
+import ChoosePackageModal from './components/ChoosePackageModal';
 
 const PotentialCustomer: FC = () => {
   const [visible, setVisible] = useState(false);
-  const [logModalZVisible, setLogModalVisible] = useState(false);
-  const [record, setRecord] = useState();
+  const [logModalVisible, setLogModalVisible] = useState(false);
+  const [packageModalVisible, setPackageModalVisible] = useState(false);
+  const [record, setRecord] = useState<any>();
 
   const [form] = Form.useForm<{
     [x: string]: any; name: string; company: string
@@ -36,6 +39,15 @@ const PotentialCustomer: FC = () => {
   }>();
 
   const tableRef = useRef<ActionType>();
+
+  const onCustomerUpdate = async (value: Record<string, any>, record: Record<string, any>) => {
+    const payload = {
+      id: record.id,
+      ...value,
+    }
+    await updateCustomer(payload);
+    tableRef.current?.reload();
+  }
 
   const columns: ProColumns<any>[] = useMemo(() => {
     return [
@@ -50,28 +62,66 @@ const PotentialCustomer: FC = () => {
       {
         title: '联系方式',
         align: 'center',
-        width: 140,
+        width: 120,
         dataIndex: 'phone',
       },
       {
         title: '出生日期',
-        width: 140,
+        width: 120,
         align: 'center',
         dataIndex: 'anniversary',
         valueType: 'date',
       },
       {
-        title: '邮箱',
+        title: '已添加微信',
+        width: 100,
         align: 'center',
-        width: 180,
-        search: false,
-        dataIndex: 'email',
+        dataIndex: 'add_wechat',
+        valueEnum: {
+          0: { text: '未添加', status: 'Default' },
+          1: { text: '已添加', status: 'Processing' },
+        },
+        search: true,
+        render: (_, record) => {
+          return <Switch checked={record.add_wechat} onChange={(value) => onCustomerUpdate({
+            add_wechat: value ? 1 : 0,
+          }, record)} />
+        },
       },
       {
-        title: '地址',
-        width: 300,
+        title: '是否可上门',
+        width: 100,
+        align: 'center',
+        dataIndex: 'can_go_house',
+        valueEnum: {
+          1: { text: '可上门', status: 'Default' },
+          0: { text: '不可上门', status: 'Processing' },
+        },
+        render: (_, record) => {
+          return <Switch checked={record.can_go_house} onChange={(value) => onCustomerUpdate({
+            can_go_house: value ? 1 : 0,
+          }, record)} />
+        },
+      },
+      {
+        title: '套餐',
+        width: 100,
+        align: 'center',
+        search: false,
+        dataIndex: 'will_purchase',
+        render: (_, record) => {
+          return <Button onClick={() => {
+            setRecord(record);
+            setPackageModalVisible(true);
+          }}>选择套餐</Button>
+        },
+      },
+      {
+        title: '家庭地址',
+        width: 200,
         align: 'center',
         dataIndex: 'address',
+        ellipsis: true,
         search: false,
       },
       {
@@ -102,6 +152,10 @@ const PotentialCustomer: FC = () => {
     ]
   }, [form]);
 
+  const fetchTableData = async (params: any) => {
+    return getCustomerList({ deal: 1, ...params })
+  }
+
   const handleFile = (file: File) => {
     const reader = new FileReader();
     reader.onload = async (e: any) => {
@@ -122,7 +176,6 @@ const PotentialCustomer: FC = () => {
     };
     reader.readAsArrayBuffer(file);
   };
-
   const uploadProps = useMemo(() => {
     return {
       beforeUpload: (file: File) => {
@@ -133,11 +186,10 @@ const PotentialCustomer: FC = () => {
     }
   }, []);
 
-  const { runAsync: fetchStoreList } = useRequest(() => getCustomerList({ deal: 0 }), { manual: true });
   return <PageContainer header={{ title: null }}>
     <ProTable
       actionRef={tableRef}
-      request={fetchStoreList}
+      request={fetchTableData}
       columns={columns}
       // 工具栏
       toolBarRender={() => [
@@ -155,13 +207,31 @@ const PotentialCustomer: FC = () => {
       ]}
       scroll={{ x: columnScrollX(columns) }}
     />
-    {logModalZVisible && <CustomerDetail
+    {logModalVisible && <CustomerDetail
       title="跟踪记录"
       width={500}
       initialValues={record}
-      open={logModalZVisible}
+      open={logModalVisible}
       onCancel={() => {
         setLogModalVisible(false)
+      }}
+    />}
+
+    {packageModalVisible && <ChoosePackageModal
+      title="选择套餐"
+      initialValues={record}
+      open={packageModalVisible}
+      onFinish={async (values) => {
+        createMembersCoupons({
+          ...values,
+          quantity: 1,
+          customers: [record?.id],
+        });
+        setPackageModalVisible(false);
+      }}
+      modalProps={{
+        destroyOnClose: true,
+        onCancel: () => setPackageModalVisible(false),
       }}
     />}
 

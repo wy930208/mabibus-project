@@ -1,3 +1,4 @@
+import { UUID } from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -147,6 +148,46 @@ export class Customer extends Model<any> {
     comment: '到店次数',
   })
   visit_store_num?: number;
+
+  //用户状态
+  @IsIn({
+    args: [[0, 1]],
+    msg: 'add_wechat 字段值错误',
+  })
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+    comment: '是否添加微信（0:未添加，1：已添加)',
+  })
+  add_wechat: Status;
+
+  @IsIn({
+    args: [[0, 1]],
+    msg: 'can_go_house 字段值错误',
+  })
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+    comment: '是否可上门（0:否，1：是)',
+  })
+  can_go_house: Status;
+
+  @IsIn({
+    args: [[0, 1]],
+    msg: 'will_purchase 字段值错误',
+  })
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+    comment: '是否愿意购买（0:否，1：是)',
+  })
+  will_purchase: Status;
+
+  @Column({
+    type: UUID,
+    comment: '服务门店',
+  })
+  service_store: Status;
 
   //上次到店时间
   @IsDate

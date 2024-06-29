@@ -15,6 +15,7 @@ import {
 import { Coupons } from './coupons.model';
 import { Customer } from './customer.model';
 import { Store } from './store.model';
+import { XmwOrganization } from './xmw_organization.model';
 
 @Table({ tableName: 'members_coupons', comment: '会员卡券' })
 export class MembersCoupons extends Model<any> {
@@ -77,6 +78,11 @@ export class MembersCoupons extends Model<any> {
     comment: '组织ID',
   })
   orgId: string;
+
+  @IsUUID(4)
+  @ForeignKey(() => XmwOrganization)
+  @Column({ type: DataType.UUID, comment: '适用门店' })
+  applicable_store_id?: string;
 
   @IsUUID(4)
   @ForeignKey(() => Store)

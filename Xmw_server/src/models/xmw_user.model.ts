@@ -9,8 +9,6 @@ import {
   IsUrl,
   IsUUID,
   Length,
-  Max,
-  Min,
   Model,
   NotEmpty,
   PrimaryKey,

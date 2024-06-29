@@ -1,16 +1,18 @@
-import { FC, useMemo } from "react";
-import { ModalForm, ProFormDigit, ProFormSelect, ProFormText, ModalFormProps } from "@ant-design/pro-components";
+import { ModalForm, ModalFormProps,ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-components';
+import { useRequest } from '@umijs/max';
 import { Form } from 'antd';
-import { CouponsTypeNameMap } from "../constants";
-import { getCustomerList } from "@/services/customer";
-import { useRequest } from "@umijs/max";
-import { formatResponse } from "@/utils";
+import { FC, useMemo } from 'react';
+
+import { getCustomerList } from '@/services/customer';
+import { formatResponse } from '@/utils';
+
+import { CouponsTypeNameMap } from '../constants';
 
 type Props = ModalFormProps
 
-const selectOpt = Object.keys(CouponsTypeNameMap).map(key => ({
+const selectOpt = Object.keys(CouponsTypeNameMap).map((key) => ({
   value: key,
-  label: CouponsTypeNameMap[key]
+  label: CouponsTypeNameMap[key],
 }))
 
 const DistributeCouponsModal: FC<Props> = (props) => {
@@ -24,7 +26,7 @@ const DistributeCouponsModal: FC<Props> = (props) => {
   const customerOpt = useMemo(() => {
     return data?.map((item: { id: string; user_name: string; }) => ({
       value: item.id,
-      label: item.user_name
+      label: item.user_name,
     }))
   }, [data]);
 
@@ -41,7 +43,6 @@ const DistributeCouponsModal: FC<Props> = (props) => {
       mode='multiple'
       label="发放对象"
       options={customerOpt}
-      // required
     />
     <ProFormDigit
       label="发放数量"

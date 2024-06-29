@@ -49,7 +49,7 @@ export class CustomerService {
 
   async findAll(customerInfo?: any, orgId?: string) {
     // 无法获取组织店铺的信息，直接返回
-    if (!orgId) return responseMessage([]);
+    // if (!orgId) return responseMessage([]);
 
     let where: WhereOptions;
     if (customerInfo) {
@@ -62,13 +62,22 @@ export class CustomerService {
           [Op.like]: `%${customerInfo?.phone || ''}%`,
         },
       };
+
+      if (customerInfo.add_wechat !== undefined) {
+        where.add_wechat = customerInfo.add_wechat;
+      }
+      if (customerInfo.can_go_house !== undefined) {
+        where.can_go_house = customerInfo.can_go_house;
+      }
+
+      console.log('====customerInfo', customerInfo.can_go_house);
     }
 
     const list = await this.getOrgList(orgId);
 
     where = {
       ...where,
-      org_id: { [Op.in]: list },
+      // org_id: { [Op.in]: list },
     };
 
     const result = await this.customerModel.findAll({

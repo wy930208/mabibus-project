@@ -57,6 +57,7 @@ export class MembersCouponsService {
           balance: coupon.amount,
           remaining_times: coupon.times,
           status: 0,
+          applicable_store_id: dto.applicable_store_id,
           // 如果是固定时间，结束时间则为过期时间，否则为当前时间+优惠券过期天数
           expire_time:
             coupon.expire_type === 'fix' ? coupon.endTime : daysLater,
