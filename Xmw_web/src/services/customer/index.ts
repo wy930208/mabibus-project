@@ -42,4 +42,4 @@ export const createCustomerComment = (payload: {
   customer_id: string;
   content: string;
   from_uid: string;
-}) => httpRequest.post(`/customer/comment`, payload);
+}) => httpRequest.post('/customer/comment', payload);

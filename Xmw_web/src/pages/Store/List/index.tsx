@@ -1,169 +1,140 @@
 import {
   ActionType,
-  ModalForm,
   PageContainer,
+  ProCard,
   ProColumns,
   ProForm,
-  ProFormRadio,
+  ProFormDateTimePicker,
+  ProFormSelect,
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components'
 import { useRequest } from 'ahooks'
-import { Form, message, Switch } from 'antd';
+import { Form } from 'antd';
+import dayjs from 'dayjs';
 import { FC, useMemo, useRef, useState } from 'react';
 
-import DropdownMenu from '@/components/DropdownMenu';
-import { CreateButton, operationColumn } from '@/components/TableColumns';
-import { createStore, deleteStore, getStoreList, updateStore } from '@/services/store';
-import { ROUTES } from '@/utils/enums';
+import FormCustomerSelect from '@/components/FormCustomerSelect';
+import FormStoreSelect from '@/components/FormStoreSelect';
+import { fetchCoupons } from '@/services/coupons';
 
 const StoreManagement: FC = () => {
-  const [visible, setVisible] = useState(false);
   const [form] = Form.useForm<{
     [x: string]: any; name: string; company: string
   }>();
 
-  const tableRef = useRef<ActionType>();
-
   const columns: ProColumns<any>[] = useMemo(() => {
     return [
       {
-        title: '店铺名称',
-        dataIndex: 'store_name',
+        title: '项目名称',
+        dataIndex: 'coupon_name',
         ellipsis: true,
       },
       {
-        title: '联系方式',
-        dataIndex: 'phone',
-        copyable: true,
+        title: '项目备注',
+        dataIndex: 'remark',
         ellipsis: true,
-      },
-      {
-        title: '负责人',
-        dataIndex: 'store_manager',
-      },
-      {
-        title: '地址',
-        dataIndex: 'address',
-      },
-      {
-        title: '状态',
-        dataIndex: 'status',
-        render: (value) => {
-          return <Switch checked={value === 1} />
-        },
-      },
-      {
-        title: '创建时间',
-        dataIndex: 'created_time',
-        valueType: 'dateTime',
-      },
-      {
-
-        ...operationColumn,
-        render: (_, record) => {
-          return <DropdownMenu
-            pathName={ROUTES.STORE_MANAGEMENT}
-            editCallback={() => {
-              form.setFieldsValue(record);
-              setVisible(true);
-            }}
-            deleteParams={{
-              request: deleteStore,
-              id: record.id,
-            }}
-            reloadTable={() => tableRef.current?.reload()}
-          />
-        },
       },
     ]
-  }, [form])
+  }, [])
 
-  const { runAsync: fetchStoreList } = useRequest(getStoreList, { manual: true });
+  const { runAsync: fetchStoreList } = useRequest(fetchCoupons);
+
   return <PageContainer header={{ title: null }}>
-    <ProTable
-      actionRef={tableRef}
-      request={fetchStoreList}
-      columns={columns}
-      // 工具栏
-      toolBarRender={() => [
-        <CreateButton
-          key="create"
-          pathName={ROUTES.STORE_MANAGEMENT}
-          callback={() => { setVisible(true) }} />,
-      ]}
-    />
-    <ModalForm
-      title="新建店铺"
-      width={500}
-      grid
-      form={form}
-      open={visible}
-      onFinish={async (values) => {
-        const id = form.getFieldValue('id')
-        const msgPrix = id ? '更新' : '创建';
 
-        if (id) {
-          await updateStore({ id, ...values });
-        } else {
-          await createStore(values);
-        }
-        
-        message.success(`${msgPrix}成功`);
-        setVisible(false);
-        tableRef.current?.reload();
-      }}
-      modalProps={{
-        destroyOnClose: true,
-        onCancel: () => setVisible(false),
-      }}
-    >
-      <ProForm.Group>
-        <ProFormText
-          colProps={{ span: 24 }}
-          name="store_name"
-          label="店铺名称"
-          rules={[{ required: true, message: '店铺名称不能为空' }]}
-          placeholder="请输入名称"
-        />
-      </ProForm.Group>
-      <ProForm.Group>
-        <ProFormText
-          name="phone"
-          label="联系方式"
-          placeholder="手机号码"
-        />
-      </ProForm.Group>
-      <ProForm.Group>
-        <ProFormText
-          name="store_manager"
-          label="负责人"
-        />
-      </ProForm.Group>
-      <ProForm.Group>
-        <ProFormText
-          name="address"
-          label="地址"
-        />
-      </ProForm.Group>
-      <ProForm.Group>
-        <ProFormRadio.Group
-          initialValue={1}
-          label="状态"
-          name="status"
-          options={[{
-            value: 0,
-            label: '禁用',
-          },
-          {
-            value: 1,
-            label: '启用',
-          }]}
-        />
+    <ProForm form={form} grid submitter={{
+      resetButtonProps: {
+        style: {
+          // 隐藏重置按钮
+          display: 'none',
+        },
+      },
+    }}>
+      <ProCard title="预约服务" gutter={8} ghost>
+        <ProCard colSpan={10} bordered>
+          <FormCustomerSelect
+            colProps={{ span: 24 }}
+            name="customer"
+            label="会员卡号"
+            rules={[{ required: true, message: '请选择客户' }]}
+            placeholder="请选择或新建客户"
+          />
+        </ProCard>
 
-        {/* <ProFormSwitch initialValue={true} label="状态" name="status" /> */}
-      </ProForm.Group>
-    </ModalForm>
+        <ProCard colSpan={14} bordered>
+          <ProForm.Item name="coupons" label="服务项目" required>
+            <ProTable
+              rowKey="id"
+              options={false}
+              ghost
+              request={fetchStoreList}
+              columns={columns}
+              search={false}
+              rowSelection={{
+                type: 'checkbox', onChange: (ids) => {
+                  form.setFieldsValue({
+                    coupons: ids,
+                  })
+                },
+              }}
+              pagination={false}
+            />
+          </ProForm.Item>
+          <ProForm.Group>
+            <ProFormSelect
+              colProps={{ span: 12 }}
+              name="server_method"
+              label="服务方式"
+              options={[{
+                label: '上门',
+                value: 'house',
+              }, {
+                label: '到店',
+                value: 'store',
+              }]}
+            />
+            <ProFormDateTimePicker
+              colProps={{ span: 12 }}
+              name="book_time"
+              label="预约时间"
+              fieldProps={{
+                showTime: {
+                  format: 'HH:mm',
+                },
+                disabledDate: (current) => current && current < dayjs().startOf('day'),
+              }}
+            />
+          </ProForm.Group>
+          <ProForm.Group>
+            <FormStoreSelect
+              colProps={{ span: 12 }}
+              name="store"
+              label="服务门店"
+            />
+            <ProFormSelect
+              colProps={{ span: 12 }}
+              name="book_method"
+              label="预约方式"
+            />
+          </ProForm.Group>
+          <ProForm.Group>
+            <ProFormSelect
+              colProps={{ span: 12 }}
+              name="tec"
+              label="预约老师"
+            />
+            <ProFormText
+              colProps={{ span: 12 }}
+              name="remark"
+              label="预约备注"
+            />
+          </ProForm.Group>
+
+        </ProCard>
+
+      </ProCard>
+    </ProForm>
+
   </PageContainer>
 }
 

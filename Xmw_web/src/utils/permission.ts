@@ -65,4 +65,11 @@ export default {
       delete: 'store:list:delete', // 删除
     },
   },
+  customer: {
+    management: {
+      add: 'customer:management:add', // 新建
+      edit: 'customer:management:edit', // 编辑
+      delete: 'customer:management:delete', // 删除
+    },
+  },
 };

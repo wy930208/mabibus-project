@@ -14,14 +14,14 @@ export const deleteStore = (id: string) => httpRequest.delete(`/store/${id}`);
 
 export const updateStore = ({ id, ...options }: any) => httpRequest.patch(`/store/${id}`, options);
 
-// /**
-//  * @description: 获取用户权限菜单
-//  * @Author: 白雾茫茫丶
-//  */
-// export const getRoutesMenus = () => httpRequest.get<API.MENUMANAGEMENT[]>('/auth/routes-menu');
+/**
+ * @description: 获取用户权限菜单
+ * @Author: 白雾茫茫丶
+ */
+export const getRoutesMenus = () => httpRequest.get<API.MENUMANAGEMENT[]>('/auth/routes-menu');
 
-// /**
-//  * @description: 获取图形验证码
-//  * @Author: 白雾茫茫丶
-//  */
-// export const getCaptcha = () => httpRequest.get<string>('/auth/verify-code');
+/**
+ * @description: 获取图形验证码
+ * @Author: 白雾茫茫丶
+ */
+export const getCaptcha = () => httpRequest.get<string>('/auth/verify-code');

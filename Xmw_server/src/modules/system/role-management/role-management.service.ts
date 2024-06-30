@@ -42,7 +42,7 @@ export class RoleManagementService {
 
     private sequelize: Sequelize,
     private readonly operationLogsService: OperationLogsService,
-  ) { }
+  ) {}
 
   /**
    * @description: 获取角色管理列表
@@ -244,7 +244,8 @@ export class RoleManagementService {
     // 根据主键查找出当前数据
     const currentInfo = await this.roleModel.findByPk(role_id);
     await this.operationLogsService.saveLogs(
-      `更新角色[${currentInfo.role_name}]状态：${{ 0: '禁用', 1: '正常' }[status]
+      `更新角色[${currentInfo.role_name}]状态：${
+        { 0: '禁用', 1: '正常' }[status]
       }`,
     );
     return responseMessage(result);

@@ -51,7 +51,9 @@ export const BasiLayout: RunTimeLayoutConfig = ({ initialState, setInitialState 
 			}
 		},
 		menu: {
-			request: async () => initialState?.RouteMenu,
+			request: async () => {
+				return initialState?.RouteMenu;
+			},
 		},
 		/* 自定义面包屑 */
 		breadcrumbProps: {
@@ -71,7 +73,7 @@ export const BasiLayout: RunTimeLayoutConfig = ({ initialState, setInitialState 
 					<Space>
 						{/* 分组布局不用渲染图标，避免重复 */}
 						{!(LAYOUT?.siderMenuType === 'group') &&
-							menuItemProps.pro_layout_parentKeys?.length &&
+							menuItemProps.pro_layout_parentKeys?.length > 0 &&
 							<IconFont type={toString(menuItemProps.icon)} />}
 						<Paragraph
 							ellipsis={{ rows: 1, tooltip: defaultDom }}

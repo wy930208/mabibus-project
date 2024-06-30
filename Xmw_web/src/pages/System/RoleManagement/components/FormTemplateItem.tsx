@@ -11,7 +11,7 @@ import { useIntl } from '@umijs/max'
 import { useRequest } from 'ahooks'
 import { TreeSelect } from 'antd'
 import { get } from 'lodash-es'
-import type { FC } from 'react';
+import { type FC } from 'react';
 
 import { ProFormDescribe, ProFormSort, ProFormStatus } from '@/components/CommonProForm'
 import { getMenuList } from '@/services/system/menu-management'
@@ -26,7 +26,9 @@ const FormTemplateItem: FC = () => {
 	 */
 	const { data: menuData } = useRequest(async (params) => get(await getMenuList(params), 'data', []), {
 		defaultParams: [{ isPremission: true }],
-	})
+	});
+
+	
 	return (
 		<>
 			{/* 角色名称 */}

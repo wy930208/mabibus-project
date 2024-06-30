@@ -38,7 +38,7 @@ const TableTemplate: FC = () => {
 	// hooks 调用
 	const { message } = App.useApp();
 	// 表单实例
-	const [form] = Form.useForm<API.ROLEMANAGEMENT>();
+	const [form] = Form.useForm<(API.ROLEMANAGEMENT & { origin_menu_permission: any })>();
 	// 获取表格实例
 	const tableRef = useRef<ActionType>();
 	const [roleLoading, { setTrue: setRoleLoadingTrue, setFalse: setRoleLoadingFalse }] = useBoolean(false);
@@ -139,6 +139,7 @@ const TableTemplate: FC = () => {
 					editCallback={() => {
 						form.setFieldsValue({
 							...record,
+							origin_menu_permission: record.menu_permission,
 							menu_permission: map(record.menu_permission, 'menu_id'),
 						});
 						setOpenDrawerTrue()

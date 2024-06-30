@@ -42,7 +42,7 @@ export class AuthService {
     private readonly redisCacheService: RedisCacheService,
     private sequelize: Sequelize,
     private readonly operationLogsService: OperationLogsService,
-  ) { }
+  ) {}
 
   /**
    * @description: 用户登录
@@ -255,7 +255,7 @@ export class AuthService {
         ],
         where: {
           menu_type: {
-            [Op.ne]: 'button',
+            [Op.eq]: 'menu',
           },
           status: {
             [Op.ne]: '0',
@@ -267,9 +267,41 @@ export class AuthService {
         },
         order: [['sort', 'desc']], // 排序规则,
       });
+
+      const dirMenu = await this.menuModel.findAll({
+        attributes: {
+          exclude: ['name'],
+          include: [[this.sequelize.literal('`i`.`name`'), 'name']],
+        },
+        // 联表查询
+        include: [
+          {
+            model: XmwInternational,
+            as: 'i',
+            attributes: [],
+          },
+        ],
+        where: {
+          menu_type: {
+            [Op.eq]: 'dir',
+          },
+          status: {
+            [Op.ne]: '0',
+          },
+        },
+      });
+
       // 将数据转成树形结构
-      const routes = initializeTree(sqlData, 'menu_id', 'parent_id', 'routes');
-      return responseMessage(routes);
+      const routes = initializeTree(
+        sqlData.concat(dirMenu),
+        'menu_id',
+        'parent_id',
+        'routes',
+      );
+
+      return responseMessage(
+        routes?.filter((item) => (item as any).routes?.length > 0),
+      );
     }
     return responseMessage({}, '登录信息已失效!', 401);
   }

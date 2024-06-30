@@ -39,6 +39,7 @@ const FormTemplate: FC<FormTemplateProps> = ({ reloadTable, open, setOpenDrawerF
 
 	// 提交表单
 	const handlerSubmit = async (values: API.ROLEMANAGEMENT): Promise<void> => {
+		console.log('====111====', values)
 		// 提交数据
 		await (role_id ? updateRole : createRole)({ ...values, role_id }).then(({ code, msg }) => {
 			if (isSuccess(code)) {

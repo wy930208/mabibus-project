@@ -1,5 +1,5 @@
 import { ModalForm, ModalFormProps, ProFormDateRangePicker, ProFormDigit, ProFormRadio, ProFormSelect, ProFormText } from '@ant-design/pro-components';
-import { Form, message, Space, Tag } from 'antd';
+import { Form } from 'antd';
 import { FC, useState } from 'react';
 
 import { CouponsTypeNameMap } from '../constants';
@@ -14,7 +14,7 @@ const selectOpt = Object.keys(CouponsTypeNameMap).map((key) => ({
 }))
 
 const CouponsFormModal: FC<Props> = (props) => {
-  const { storeList, ...otherProps } = props;
+  const { ...otherProps } = props;
   const [form] = Form.useForm<{
     [x: string]: any; name: string; company: string
   }>();

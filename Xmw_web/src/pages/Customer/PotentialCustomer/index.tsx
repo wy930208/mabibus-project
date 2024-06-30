@@ -135,7 +135,7 @@ const PotentialCustomer: FC = () => {
             }} key="detail">跟踪</Button>
             <DropdownMenu
               key="opt"
-              pathName={ROUTES.STORE_MANAGEMENT}
+              pathName={ROUTES.CUSTOMER_MANAGEMENT}
               editCallback={() => {
                 form.setFieldsValue(record);
                 setVisible(true);
@@ -202,7 +202,7 @@ const PotentialCustomer: FC = () => {
         </Upload>,
         <CreateButton
           key="create"
-          pathName={ROUTES.STORE_MANAGEMENT}
+          pathName={ROUTES.CUSTOMER_MANAGEMENT}
           callback={() => { setVisible(true) }} />,
       ]}
       scroll={{ x: columnScrollX(columns) }}

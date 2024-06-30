@@ -144,7 +144,7 @@ const CustomerManagement: FC = () => {
             {/* <Link to={`/customer/detail/${record.id}`} key="detail">详情</Link> */}
             <DropdownMenu
               key="opt"
-              pathName={ROUTES.STORE_MANAGEMENT}
+              pathName={ROUTES.CUSTOMER_MANAGEMENT}
               editCallback={() => {
                 form.setFieldsValue(record);
                 setVisible(true);
@@ -178,7 +178,7 @@ const CustomerManagement: FC = () => {
       toolBarRender={() => [
         <CreateButton
           key="create"
-          pathName={ROUTES.STORE_MANAGEMENT}
+          pathName={ROUTES.CUSTOMER_MANAGEMENT}
           callback={() => { setVisible(true) }} />,
       ]}
       scroll={{ x: columnScrollX(columns) }}
@@ -206,7 +206,6 @@ const CustomerManagement: FC = () => {
         onCancel: () => setVisible(false),
       }}
     >
-
       <ProFormText
         colProps={{ span: 24 }}
         name="user_name"

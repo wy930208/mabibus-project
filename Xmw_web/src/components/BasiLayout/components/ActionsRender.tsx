@@ -24,6 +24,6 @@ export default function actionsRender(props: HeaderProps) {
     // 全屏
     <FullScreen key="FullScreen" />,
     // 多语言
-    <SelectLang reload={false} key="SelectLang" style={{ padding: isSide ? 0 : 6 }} />,
+    // <SelectLang reload={false} key="SelectLang" style={{ padding: isSide ? 0 : 6 }} />,
   ];
 }
