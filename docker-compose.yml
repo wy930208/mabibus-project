@@ -14,16 +14,12 @@ services:
       MYSQL_USER: wy
       MYSQL_PASSWORD: wy930208
       TZ: Asia/Shanghai
+    networks:
+      - backend
     expose:
       - "3306"
     ports:
       - "3307:3306"
-
-  admin-front:
-    build: ./Xmw_web
-    container_name: admin-web
-    ports:
-      - "8000:80"
 
   redis:
     image: redis:latest
@@ -33,6 +29,8 @@ services:
       - "6379"
     ports:
       - "6378:6379"
+    networks:
+      - backend
     environment:
       TZ: Asia/Shanghai
 
@@ -42,9 +40,12 @@ services:
     # restart: always
     ports:
       - "3000:6688"
-    links:
-      - redis
-      - mysql
+    networks:
+      - backend
     depends_on:
       - mysql
       - redis
+
+networks:
+  backend:
+    driver: bridge
