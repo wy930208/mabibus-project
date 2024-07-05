@@ -19,12 +19,6 @@ services:
     ports:
       - "3307:3306"
 
-  admin-front:
-    build: ./Xmw_web
-    container_name: admin-web
-    ports:
-      - "80:80"
-
   redis:
     image: redis:latest
     container_name: admin-redis
