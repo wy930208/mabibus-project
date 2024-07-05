@@ -14,8 +14,6 @@ services:
       MYSQL_USER: wy
       MYSQL_PASSWORD: wy930208
       TZ: Asia/Shanghai
-    networks:
-      - backend
     expose:
       - "3306"
     ports:
@@ -29,8 +27,6 @@ services:
       - "6379"
     ports:
       - "6378:6379"
-    networks:
-      - backend
     environment:
       TZ: Asia/Shanghai
 
@@ -40,12 +36,9 @@ services:
     # restart: always
     ports:
       - "3000:6688"
-    networks:
-      - backend
+    links:
+      - redis
+      - mysql
     depends_on:
       - mysql
       - redis
-
-networks:
-  backend:
-    driver: bridge
