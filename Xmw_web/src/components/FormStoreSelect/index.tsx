@@ -17,10 +17,30 @@ const FormStoreSelect: FC<ProFormSelectProps & {
   });
 
   const opts = useMemo(() => {
-    return data?.[0]?.children?.map((item) => ({
-      value: item.org_id,
-      label: item.org_name,
-    }))
+    const list: {
+      value: string;
+      label: string
+    }[] = [];
+    data?.[0]?.children?.forEach((item) => {
+      if (item.org_type === 'unit') {
+        list.push({
+          value: item.org_id,
+          label: item.org_name,
+        })
+      }
+
+      if (item.children) {
+        item.children?.forEach((item) => {
+          if (item.org_type === 'unit') {
+            list.push({
+              value: item.org_id,
+              label: item.org_name,
+            })
+          }
+        });
+      }
+    })
+    return list;
   }, [data]);
 
   return <ProFormSelect

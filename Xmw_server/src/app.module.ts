@@ -30,6 +30,7 @@ import { UserManagementModule } from '@/modules/system/user-management/user-mana
 import App_globalConfig from './config/configuration'; // 全局配置
 import DatabaseConfig from './config/database'; // 数据库配置
 import RedisConfig from './config/redis'; // redis配置
+import { AppointmentModule } from './modules/appointment/appointment.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import RedisConfig from './config/redis'; // redis配置
     CouponsModule,
     CustomerCommentModule,
     MembersCouponsModule,
+    AppointmentModule,
   ],
 })
 export class AppModule {}

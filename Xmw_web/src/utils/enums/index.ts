@@ -30,7 +30,7 @@ export enum REQUEST_METHODS {
 export enum BASEURL {
   // API = '/api'
   API = 'http://localhost:6688/v1'
-  //  API = 'http://116.196.112.102:3000/v1'
+  //  API = 'http://106.53.56.87:3000/v1/'
 }
 
 /**

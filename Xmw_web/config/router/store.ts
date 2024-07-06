@@ -19,5 +19,12 @@ export default {
         component: './Store/List',
         exact: true,
       },
+      {
+        path: '/store/sale',
+        name: 'sale',
+        // access: 'adminRouteFilter',
+        component: './Store/Sale',
+        exact: true,
+      },
     ],
   };

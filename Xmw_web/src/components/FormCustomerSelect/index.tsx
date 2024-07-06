@@ -59,15 +59,22 @@ const FormCustomerSelect: FC<ProFormSelectProps & {
       style={{ width: 300 }}
       options={opts}
       onChange={(value, allValue) => {
-        setSelectId(value)
+        setSelectId(value);
+        form.setFieldsValue({
+          [props.name]: value,
+        })
         props?.onChange?.(value, allValue);
       }}
       addonAfter={<div>
         <Button onClick={() => setVisible(true)}>新建会员</Button>
       </div>}
-    >
-    </ProFormSelect>
-    <Descriptions column={1} title="信息核对" size="small" bordered items={selectCustomer} />
+    />
+
+    {!!selectCustomer?.length ? <>
+      <p style={{ marginLeft: 12 }}>信息核对:</p>
+      <Descriptions style={{ marginBottom: 24 }} column={3} size="small" bordered items={selectCustomer} />
+    </> : null}
+    
     <CreateCustomerModal
       open={visible}
       onFinish={async (data) => {

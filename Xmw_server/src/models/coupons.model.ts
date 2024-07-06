@@ -14,7 +14,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { XmwOrganization } from './xmw_organization.model';
+import { Appointment } from './appointment_service.model';
 
 @Table({ tableName: 'coupons', comment: '卡券' })
 export class Coupons extends Model<any> {
@@ -26,6 +26,7 @@ export class Coupons extends Model<any> {
     defaultValue: DataType.UUIDV4,
     comment: '卡券ID',
   })
+  @ForeignKey(() => Appointment)
   id: number;
 
   @Length({ min: 2, max: 32, msg: '名称的长度在2-36个字符' })

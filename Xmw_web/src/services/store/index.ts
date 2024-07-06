@@ -20,8 +20,7 @@ export const updateStore = ({ id, ...options }: any) => httpRequest.patch(`/stor
  */
 export const getRoutesMenus = () => httpRequest.get<API.MENUMANAGEMENT[]>('/auth/routes-menu');
 
-/**
- * @description: 获取图形验证码
- * @Author: 白雾茫茫丶
- */
-export const getCaptcha = () => httpRequest.get<string>('/auth/verify-code');
+export const getAppointmentList = (query: Record<string, any>) =>
+  httpRequest.get('/appointment', query);
+
+export const createAppointment = (data: any) => httpRequest.post<string[]>('/appointment', data);
