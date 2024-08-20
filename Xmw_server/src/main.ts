@@ -26,7 +26,11 @@ async function bootstrap() {
   // 启动cors跨域
   app.enableCors({
     credentials: true,
-    origin: ['http://106.53.56.87', 'http://localhost:8888'],
+    origin: [
+      'http://106.53.56.87',
+      'http://localhost:8888',
+      'http://www.mommybus.site',
+    ],
   });
 
   // 配置 session
