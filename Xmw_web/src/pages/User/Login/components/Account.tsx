@@ -54,7 +54,7 @@ const Account: FC = () => {
 						message: formatMessage({ id: formatPerfix(ROUTES.LOGIN, 'type.account.password.required') }),
 					},
 				]}
-				initialValue="abc123456"
+				initialValue=""
 			/>
 			<Form.Item>
 				<Row gutter={8}>
