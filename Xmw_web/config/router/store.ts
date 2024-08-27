@@ -26,5 +26,11 @@ export default {
         component: './Store/Sale',
         exact: true,
       },
+      {
+        path: '/store/service-registration',
+        name: 'service-registration',
+        component: './Store/ServiceRegistration',
+        exact: true,
+      },
     ],
   };

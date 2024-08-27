@@ -8,11 +8,6 @@ import type { FC } from 'react';
 import { getOrganizationList } from '@/services/administrative/organization' // 组织管理接口
 
 const Structure: FC = () => {
-	/**
-	 * @description: 递归遍历树结构
-	 * @param {*} tree
-	 * @Author: 白雾茫茫丶
-	 */
 	function loopTree<T>(tree: (NodeData<{ name?: string }> & T &
 	{ [key: string]: string })[], idField: string, nameField: string) {
 		tree.forEach((node) => {
@@ -25,11 +20,6 @@ const Structure: FC = () => {
 		})
 	}
 
-	/**
-	 * @description: 获取组织管理列表
-	 * @return {*}
-	 * @Author: 白雾茫茫丶
-	 */
 	const { data: orgList, loading } = useRequest<API.ORGANIZATION[], unknown[]>(
 		async () => {
 			const treeData = get(await getOrganizationList(), 'data', [])
@@ -37,17 +27,10 @@ const Structure: FC = () => {
 			return treeData
 		});
 
-	const data = {
-		id: '1',
-		value: {
-			name: 'Mommy Bus',
-		},
-		children: orgList,
-	}
 	return (
 		<PageContainer header={{ title: null }}>
 			<Card loading={loading}>
-				<OrganizationGraph data={data} behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']} />
+				<OrganizationGraph data={orgList?.[0] ?? {}} behaviors={['drag-canvas', 'zoom-canvas', 'drag-node']} />
 			</Card>
 		</PageContainer>
 	)

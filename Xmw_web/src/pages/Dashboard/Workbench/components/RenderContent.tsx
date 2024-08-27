@@ -51,13 +51,6 @@ const RenderContent: FC = () => {
             </Col>
           </Row>
         </Col>
-        <Col>
-          <Space size="large">
-            <Statistic title="项目数" value={86} />
-            <Statistic title="团队内排名" value={56} suffix="/ 100" />
-            <Statistic title="项目访问" value={7647} />
-          </Space>
-        </Col>
       </Row>
     </Card>
   )

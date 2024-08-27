@@ -3,7 +3,7 @@ import {
   Column,
   DataType,
   ForeignKey,
-  IsIn,
+  HasMany,
   IsUUID,
   Model,
   Table,
@@ -14,7 +14,10 @@ import { Customer } from './customer.model';
 import { XmwOrganization } from './xmw_organization.model';
 import { XmwUser } from './xmw_user.model';
 
-@Table({ tableName: 'appointment_service' })
+/**
+ * 充值明细
+ */
+@Table({ tableName: 'recharge_details.model' })
 export class Appointment extends Model {
   @Column({
     type: DataType.UUID,
@@ -22,7 +25,7 @@ export class Appointment extends Model {
     primaryKey: true,
     comment: '主键ID',
   })
-  service_id: number;
+  recharge_id: number;
 
   @IsUUID(4)
   @ForeignKey(() => Customer)
@@ -41,51 +44,23 @@ export class Appointment extends Model {
   })
   org_id: string;
 
-  @IsIn({
-    args: [['store', 'home']],
-    msg: '用户性别: service_mode 字段值错误',
-  })
+  @IsUUID(4)
+  @ForeignKey(() => XmwUser)
   @Column({
-    type: DataType.ENUM,
+    type: DataType.UUID,
     allowNull: false,
-    values: ['store', 'home'],
-    comment: '服务方式, store-到店 home-上门',
+    comment: '销售人员',
   })
-  service_mode: string;
-
-  @Column({
-    type: DataType.JSON,
-    allowNull: false,
-    comment: '服务项目',
-  })
-  service_items: string[];
-
-  @Column({
-    type: DataType.DATE,
-    allowNull: false,
-    comment: '预约时间',
-  })
-  appointment_time: Date;
-
-  @IsIn({
-    args: [['store', 'phone', 'wechat']],
-    msg: '用户性别: appointment_mode 字段值错误',
-  })
-  @Column({
-    type: DataType.ENUM,
-    values: ['store', 'phone', 'wechat'],
-    comment: '预约方式, 门店预约、电话预约、微信预约',
-  })
-  appointment_mode?: string;
+  sales: string;
 
   @IsUUID(4)
   @ForeignKey(() => XmwUser)
   @Column({
     type: DataType.UUID,
     allowNull: false,
-    comment: '预约老师',
+    comment: '操作人',
   })
-  appointment_teacher: string;
+  operator: string;
 
   @Column({
     type: DataType.STRING,
@@ -101,4 +76,7 @@ export class Appointment extends Model {
 
   @BelongsTo(() => XmwUser, { as: 'u' })
   usr_info: XmwUser;
+
+  @HasMany(() => Coupons, { as: 'co' })
+  coupons: Coupons[];
 }

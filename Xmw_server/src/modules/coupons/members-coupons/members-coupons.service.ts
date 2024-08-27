@@ -57,6 +57,7 @@ export class MembersCouponsService {
           balance: coupon.amount,
           remaining_times: coupon.times,
           status: 0,
+          sales_id: dto.sales_id,
           applicable_store_id: dto.applicable_store_id,
           // 如果是固定时间，结束时间则为过期时间，否则为当前时间+优惠券过期天数
           expire_time:
@@ -69,7 +70,7 @@ export class MembersCouponsService {
     return responseMessage(res);
   }
 
-  async findAll(id?: number, session?: SessionTypes) {
+  async findAll(query: any, session?: SessionTypes) {
     const orgId = session?.currentUserInfo?.org_id;
     if (!orgId) return responseMessage([]);
 
@@ -77,8 +78,11 @@ export class MembersCouponsService {
       await this.organizationService.getSelfAndChildrenOrgId(orgId);
 
     let where = {};
-    if (id) {
-      where = { where: { id } };
+    if (query.id) {
+      where = { where: { id: Number(query.id) } };
+    }
+    if (query.customerId) {
+      where = { where: { customer_id: query.customerId } };
     }
     const res = await this.membersCouponsModel.findAll({
       ...where,

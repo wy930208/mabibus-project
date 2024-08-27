@@ -1,9 +1,6 @@
 import {
-  AutoIncrement,
-  BelongsTo,
   Column,
   DataType,
-  ForeignKey,
   IsDate,
   IsIn,
   IsUUID,
@@ -13,9 +10,6 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-
-import { Appointment } from './appointment_service.model';
-
 @Table({ tableName: 'coupons', comment: '卡券' })
 export class Coupons extends Model<any> {
   @IsUUID(4)
@@ -26,7 +20,6 @@ export class Coupons extends Model<any> {
     defaultValue: DataType.UUIDV4,
     comment: '卡券ID',
   })
-  @ForeignKey(() => Appointment)
   id: number;
 
   @Length({ min: 2, max: 32, msg: '名称的长度在2-36个字符' })
@@ -55,6 +48,21 @@ export class Coupons extends Model<any> {
     comment: '卡券金额',
   })
   amount: number;
+
+  @Min(0)
+  @Column({
+    type: DataType.INTEGER,
+    comment: '原价',
+  })
+  origin_price: number;
+
+  @Min(0)
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+    comment: '销售价格',
+  })
+  sale_price: number;
 
   @Min(0)
   @Column({

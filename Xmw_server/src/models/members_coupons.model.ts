@@ -73,12 +73,6 @@ export class MembersCoupons extends Model<any> {
   })
   expire_time?: Date;
 
-  @Column({
-    type: DataType.UUID,
-    comment: '组织ID',
-  })
-  orgId: string;
-
   @IsUUID(4)
   @ForeignKey(() => XmwOrganization)
   @Column({ type: DataType.UUID, comment: '适用门店' })
@@ -86,7 +80,7 @@ export class MembersCoupons extends Model<any> {
 
   @IsUUID(4)
   @ForeignKey(() => Store)
-  @Column({ type: DataType.UUID, comment: '所属门店 ID' })
+  @Column({ type: DataType.UUID, comment: '归属门店' })
   create_store?: string;
 
   @BelongsTo(() => Customer, { as: 'c' })
@@ -97,4 +91,11 @@ export class MembersCoupons extends Model<any> {
 
   @BelongsTo(() => Coupons, { as: 'p' })
   coupons: Coupons;
+
+  @Column({
+    type: DataType.STRING,
+    comment: '销售人员ID',
+    allowNull: true,
+  })
+  sales_id?: string;
 }

@@ -58,6 +58,13 @@ const CouponsList: FC = () => {
         },
       },
       {
+        title: '售价',
+        dataIndex: 'sale_price',
+        width: 80,
+        fixed: true,
+        align: 'center',
+      },
+      {
         title: '有效期',
         dataIndex: 'expire',
         width: 100,

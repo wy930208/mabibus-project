@@ -48,7 +48,6 @@ export class AppointmentService {
           [Sequelize.col('c.phone'), 'customer_phone'],
           [Sequelize.col('c.user_name'), 'customer_name'],
           [Sequelize.col('u.user_name'), 'teacher_name'],
-          'co.coupon_name',
         ],
       },
       // 联表查询
@@ -63,11 +62,6 @@ export class AppointmentService {
           as: 'u',
           attributes: [],
         },
-        {
-          model: Coupons,
-          as: 'co',
-          attributes: [],
-        },
       ],
       raw: true,
       order: [['created_time', 'desc']],
@@ -77,7 +71,9 @@ export class AppointmentService {
       data.map((item) => {
         return {
           ...item,
-          service_items: item.service_items?.map((id) => couponsMpa[id]),
+          service_items: item.service_items
+            ?.map((id) => couponsMpa[id])
+            .filter((o) => Boolean(o)),
         };
       }),
     );

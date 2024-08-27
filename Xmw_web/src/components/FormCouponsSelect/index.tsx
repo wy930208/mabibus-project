@@ -4,8 +4,8 @@ import {
   ProFormSelectProps,
   ProTable,
 } from '@ant-design/pro-components';
-import { Divider } from 'antd';
-import React, { FC, useMemo, useState } from 'react';
+import { Typography } from 'antd';
+import React, { FC,useMemo, useState } from 'react';
 
 import { fetchCoupons } from '@/services/coupons';
 
@@ -15,6 +15,7 @@ import { fetchCoupons } from '@/services/coupons';
  * @returns 
  */
 const FormCouponsSelect: FC<ProFormSelectProps & {
+  value?: string[];
   setFieldVale?: (value: string) => void
 }> = (props) => {
   const [dataSource, setDataSource] = useState<any[]>([]);
@@ -25,6 +26,11 @@ const FormCouponsSelect: FC<ProFormSelectProps & {
       {
         title: '项目',
         dataIndex: 'coupon_name',
+        ellipsis: true,
+      },
+      {
+        title: '价格',
+        dataIndex: 'sale_price',
         ellipsis: true,
       },
       {
@@ -49,8 +55,9 @@ const FormCouponsSelect: FC<ProFormSelectProps & {
   }
 
   const tableData = useMemo(() => {
-    return dataSource?.filter((row) => row.id === selectValue || selectValue?.includes(row.id))
-  }, [dataSource, selectValue]);
+    const val = props.value || selectValue;
+    return dataSource?.filter((row) => row.id === val || val?.includes(row.id))
+  }, [dataSource, props.value, selectValue]);
 
   return <div>
     <ProFormSelect
@@ -69,6 +76,21 @@ const FormCouponsSelect: FC<ProFormSelectProps & {
       ghost
       columns={columns}
       dataSource={tableData}
+      summary={(pageData) => {
+        let total = 0;
+        pageData.forEach(({ sale_price }) => {
+          total += sale_price;
+        });
+        return <ProTable.Summary fixed>
+          <ProTable.Summary.Row>
+            <ProTable.Summary.Cell index={0}><strong>金额合计</strong></ProTable.Summary.Cell>
+            <ProTable.Summary.Cell index={1}>
+              <Typography.Text type="danger">{total}</Typography.Text>
+            </ProTable.Summary.Cell>
+          </ProTable.Summary.Row>
+        </ProTable.Summary>
+
+      }}
       search={false}
       pagination={false}
     />

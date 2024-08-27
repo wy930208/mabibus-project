@@ -26,8 +26,8 @@ export class MembersCouponsController {
   }
 
   @Get()
-  findAll(@Query('id') id: string, @Session() session: SessionTypes) {
-    return this.membersCouponsService.findAll(+id, session);
+  findAll(@Query() query: any, @Session() session: SessionTypes) {
+    return this.membersCouponsService.findAll(query, session);
   }
 
   @Patch()

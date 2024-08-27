@@ -21,7 +21,8 @@ const FormCustomerSelect: FC<ProFormSelectProps & {
 }> = (props) => {
   const [visible, setVisible] = useState(false);
 
-  const form = Form.useFormInstance()
+  const form = Form.useFormInstance();
+
 
   const { data, runAsync } = useRequest(async () => {
     return getCustomerList({ deal: 1 }).then((r) => r.data)
@@ -55,7 +56,7 @@ const FormCustomerSelect: FC<ProFormSelectProps & {
 
   return <>
     <ProFormSelect
-      {...props}
+     {...props}
       style={{ width: 300 }}
       options={opts}
       onChange={(value, allValue) => {
@@ -65,16 +66,17 @@ const FormCustomerSelect: FC<ProFormSelectProps & {
         })
         props?.onChange?.(value, allValue);
       }}
+      showSearch
       addonAfter={<div>
         <Button onClick={() => setVisible(true)}>新建会员</Button>
       </div>}
     />
 
-    {!!selectCustomer?.length ? <>
+    {!!selectCustomer?.length ? <div>
       <p style={{ marginLeft: 12 }}>信息核对:</p>
       <Descriptions style={{ marginBottom: 24 }} column={3} size="small" bordered items={selectCustomer} />
-    </> : null}
-    
+    </div> : null}
+
     <CreateCustomerModal
       open={visible}
       onFinish={async (data) => {

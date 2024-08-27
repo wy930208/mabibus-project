@@ -20,6 +20,7 @@ import { CustomerCommentModule } from '@/modules/customer/comment/comment.module
 import { CustomerModule } from '@/modules/customer/information/customer.module';
 import { FilesModule } from '@/modules/files/files.module'; // 文件上传
 import { RedisCacheModule } from '@/modules/redis-cache/redis-cache.module'; // redis 缓存
+import { SalesModule } from '@/modules/sales/sales.module';
 import { StoreModule } from '@/modules/store/store.module';
 import { InternationalModule } from '@/modules/system/international/international.module'; // 系统设置-国际化
 import { MenuManagementModule } from '@/modules/system/menu-management/menu-management.module'; // 系统设置-菜单管理
@@ -65,6 +66,7 @@ import { AppointmentModule } from './modules/appointment/appointment.module';
     CustomerCommentModule,
     MembersCouponsModule,
     AppointmentModule,
+    SalesModule,
   ],
 })
 export class AppModule {}

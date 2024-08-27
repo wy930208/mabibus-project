@@ -25,8 +25,8 @@ export const updateCoupons = (options: any) => httpRequest.patch('/coupons', opt
 /**
  * @description: 获取会员卡券
  */
-export const fetchCouponsMembersCoupons = (id?: string) =>
-  httpRequest.get<string[]>('/members-coupons', { id });
+export const fetchCouponsMembersCoupons = (id?: string, customerId?: string) =>
+  httpRequest.get<any[]>('/members-coupons', { id, customerId });
 
 /**
  * @description: 新建会员卡券
