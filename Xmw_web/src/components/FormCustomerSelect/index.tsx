@@ -25,7 +25,7 @@ const FormCustomerSelect: FC<ProFormSelectProps & {
 
 
   const { data, runAsync } = useRequest(async () => {
-    return getCustomerList({ deal: 1 }).then((r) => r.data)
+    return getCustomerList().then((r) => r.data)
   });
 
   const [selectId, setSelectId] = useState<string | undefined>();

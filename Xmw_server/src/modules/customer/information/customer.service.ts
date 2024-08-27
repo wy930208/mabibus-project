@@ -54,7 +54,6 @@ export class CustomerService {
     let where: WhereOptions;
     if (customerInfo) {
       where = {
-        deal: { [Op.eq]: customerInfo.deal },
         user_name: {
           [Op.like]: `%${customerInfo?.user_name || ''}%`,
         },
@@ -62,6 +61,10 @@ export class CustomerService {
           [Op.like]: `%${customerInfo?.phone || ''}%`,
         },
       };
+
+      if (customerInfo.deal !== undefined) {
+        where.deal = customerInfo.deal;
+      }
 
       if (customerInfo.add_wechat !== undefined) {
         where.add_wechat = customerInfo.add_wechat;

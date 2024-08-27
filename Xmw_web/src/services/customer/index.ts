@@ -11,7 +11,7 @@ interface GetCustomerListDto {
  * 获取客户列表
  * @returns 
  */
-export const getCustomerList = (query: GetCustomerListDto) => httpRequest.get('/customer/info', query);
+export const getCustomerList = (query?: GetCustomerListDto) => httpRequest.get('/customer/info', query);
 
 export const getCustomerById = (id: string) => httpRequest.get(`/customer/info/${id}`);
 
