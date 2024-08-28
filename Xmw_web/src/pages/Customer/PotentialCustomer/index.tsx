@@ -18,7 +18,6 @@ import {
   bulkCreateCustomer,
   createCustomer, deleteCustomer, getCustomerList, updateCustomer,
 } from '@/services/customer';
-import { formatResponse } from '@/utils';
 import { ROUTES } from '@/utils/enums';
 
 import CustomerDetail from '../Detail'
@@ -101,19 +100,6 @@ const PotentialCustomer: FC = () => {
           return <Switch checked={record.can_go_house} onChange={(value) => onCustomerUpdate({
             can_go_house: value ? 1 : 0,
           }, record)} />
-        },
-      },
-      {
-        title: '套餐',
-        width: 100,
-        align: 'center',
-        search: false,
-        dataIndex: 'will_purchase',
-        render: (_, record) => {
-          return <Button onClick={() => {
-            setRecord(record);
-            setPackageModalVisible(true);
-          }}>选择套餐</Button>
         },
       },
       {

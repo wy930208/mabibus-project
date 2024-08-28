@@ -63,7 +63,7 @@ const ServiceRegistration: FC = () => {
               rules={[{ required: true, message: '请选择客户' }]}
               placeholder="请选择或新建客户"
             />
-            <FormCouponsSelect mode="multiple" name="product_items" label="销售项目" required />
+            <FormCouponsSelect mode="multiple" name="product_items" label="本次预约项目" required />
             <ProForm.Group>
               <ProFormSelect
                 colProps={{ span: 12 }}

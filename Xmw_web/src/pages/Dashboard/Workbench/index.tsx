@@ -14,12 +14,30 @@ const Workbench: FC = () => {
     formatResult: ((resp) => {
       const saleIndex = resp.data;
 
-      const todayIndex = saleIndex.filter((item) => {
+      const { todayIndex, chartData } = saleIndex.reduce((acc: any, item: any) => {
         const targetDate = dayjs(item.created_time);
-        return targetDate.isSame(dayjs(), 'day');
-      })
+        const date = item.created_time.slice(0, 10);
 
-     
+        const dayItem = acc.chartData[date];
+
+        if (dayItem) {
+          dayItem.orderNumber += 1;
+          dayItem.salesVolume += item.sale_amount;
+        } else {
+          acc.chartData[date] = {
+            orderNumber: 1,
+            salesVolume: item.sale_amount,
+          };
+        }
+        if (targetDate.isSame(dayjs(), 'day')) {
+          acc.todayIndex.push(item);
+        }
+        return acc;
+      }, {
+        todayIndex: [],
+        chartData: {},
+      });
+
       return {
         // 订单数量
         orderNumber: saleIndex.length,
@@ -34,10 +52,12 @@ const Workbench: FC = () => {
           sum += item.sale_amount
           return sum;
         }, 0),
+        SalesVolumeChartData: saleIndex.map((item) => item.sale_amount),
+        chartData,
       }
     }),
   });
-  console.log('====sales=====', data);
+ 
   return (
     <PageContainer content={<RenderContent />}>
       <Space direction="vertical" size="middle" style={{ display: 'flex', marginTop: 16 }}>

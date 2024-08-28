@@ -5,17 +5,18 @@ import type { FC } from 'react';
 import TinyAreaChart from './TinyAreaChart' // 迷你面积图
 import TinyColumnChart from './TinyColumnChart' // 迷你柱形图
 
-
-
-
 const StatisticChart: FC<{
   orderNumber: number,
   salesVolume: number,
   todayOrderNumber: number,
   todaySalesVolume: number,
-}> = (props) => {
+  chartData: Record<string, {
+    orderNumber: number,
+    salesVolume: number,
+  }>
+} | undefined> = (props) => {
 
-  console.log('===props====', props)
+
   return (
     <Row gutter={20}>
       <Col span={6}>
@@ -28,7 +29,9 @@ const StatisticChart: FC<{
             prefix: '¥',
             precision: 2,
           }}
-          chart={<TinyAreaChart />}
+          chart={<TinyAreaChart data={Object.keys(props?.chartData || {}).map((key) => {
+            return props?.chartData[key].salesVolume ?? 0
+          })} />}
         >
         </StatisticCard>
       </Col>
@@ -52,7 +55,9 @@ const StatisticChart: FC<{
           tip="指标说明"
           style={{ height: 200 }}
           statistic={{ value: props?.orderNumber }}
-          chart={<TinyColumnChart />}
+          chart={<TinyColumnChart data={Object.keys(props?.chartData || {}).map((key) => {
+            return props?.chartData[key].orderNumber ?? 0
+          })} />}
         >
         </StatisticCard>
       </Col>
@@ -62,7 +67,6 @@ const StatisticChart: FC<{
           tip="指标说明"
           style={{ height: 200 }}
           statistic={{ value: props?.todayOrderNumber }}
-          chart={<TinyColumnChart />}
         >
         </StatisticCard>
       </Col>

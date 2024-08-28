@@ -3,7 +3,7 @@ import {
   ProFormSelectProps,
 } from '@ant-design/pro-components';
 import { useRequest, useUpdate } from 'ahooks';
-import { Button, Descriptions, DescriptionsProps, Form } from 'antd';
+import { Button, Descriptions, DescriptionsProps, Form, Space } from 'antd';
 import React, { FC, useMemo, useState } from 'react';
 
 import { getCustomerList } from '@/services/customer';
@@ -56,7 +56,7 @@ const FormCustomerSelect: FC<ProFormSelectProps & {
 
   return <>
     <ProFormSelect
-     {...props}
+      {...props}
       style={{ width: 300 }}
       options={opts}
       onChange={(value, allValue) => {
@@ -67,9 +67,10 @@ const FormCustomerSelect: FC<ProFormSelectProps & {
         props?.onChange?.(value, allValue);
       }}
       showSearch
-      addonAfter={<div>
-        <Button onClick={() => setVisible(true)}>新建会员</Button>
-      </div>}
+      addonAfter={<Space>
+        <Button type="primary" onClick={() => setVisible(true)}>新建会员</Button>
+        <Button type="primary" onClick={() => setVisible(true)}>新建潜在客户</Button>
+      </Space>}
     />
 
     {!!selectCustomer?.length ? <div>

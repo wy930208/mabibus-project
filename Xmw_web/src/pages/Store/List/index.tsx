@@ -1,55 +1,44 @@
+import { AuditOutlined, HighlightOutlined, PhoneOutlined } from '@ant-design/icons';
 import {
   ActionType,
   PageContainer,
   ProCard,
   ProColumns,
-  ProForm,
-  ProFormDateTimePicker,
-  ProFormSelect,
-  ProFormText,
   ProTable,
 } from '@ant-design/pro-components';
 import { useRequest } from 'ahooks';
-import { Button, Form, message, Space, Tag } from 'antd';
+import { Button, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { FC, useMemo, useRef, useState } from 'react';
 
-import FormCustomerSelect from '@/components/FormCustomerSelect';
-import FormStaffSelect from '@/components/FormStaffSelect';
-import FormStoreSelect from '@/components/FormStoreSelect';
-import { fetchCoupons } from '@/services/coupons';
-import { createAppointment, getAppointmentList } from '@/services/store';
+import { fetchCouponsMembersCoupons } from '@/services/coupons';
+import { getAppointmentList } from '@/services/store';
+
+import AppointmentModal from './components/AppointmentModal';
+import CouponsManageModal from './components/CouponsManageModal';
+import ServiceRegistrationModal from './components/ServiceRegistrationModal';
 
 enum DataType {
   Today = 0,
   All = 1,
 }
 
-const StoreManagement: FC = () => {
-  const [form] = Form.useForm<{
-    [x: string]: any;
-    name: string;
-    company: string;
-  }>();
+enum ModalType {
+  CouponsManage = 'couponsManage',
+  Appointment = 'appointment',
+  ServiceRegistration = 'serviceRegistration'
+}
 
+const ModalStyles = {
+  width: 1000,
+  centered: true,
+  destroyOnClose: true,
+}
+
+const StoreManagement: FC = () => {
   const [dataType, setDataType] = useState(DataType.Today);
 
   const appointmentRef = useRef<ActionType>();
-
-  const columns: ProColumns<any>[] = useMemo(() => {
-    return [
-      {
-        title: '服务项目',
-        dataIndex: 'coupon_name',
-        ellipsis: true,
-      },
-      {
-        title: '备注',
-        dataIndex: 'remark',
-        ellipsis: true,
-      },
-    ];
-  }, []);
 
   const columns2: ProColumns<any>[] = useMemo(() => {
     return [
@@ -90,8 +79,6 @@ const StoreManagement: FC = () => {
     ];
   }, []);
 
-  const { runAsync: fetchStoreList } = useRequest(fetchCoupons);
-
   const { runAsync: fetchAppointmentList } = useRequest(() => getAppointmentList({
     date: dataType === DataType.Today ? dayjs().format('YYYY-MM-DD') : undefined,
   }));
@@ -101,192 +88,85 @@ const StoreManagement: FC = () => {
     appointmentRef?.current?.reload()
   }
 
+  const [modalStatus, setModalStatus] = useState({
+    appointmentOpen: false,
+    couponsManageOpen: false,
+    serviceRegistrationOpen: false,
+  });
+
+  const updateModalStatus = (type: string, open: boolean) => {
+    setModalStatus((prev) => ({
+      ...prev,
+      [`${type}Open`]: open,
+    }))
+  }
+
   return (
     <PageContainer header={{ title: null }}>
-      <ProCard gutter={8} ghost>
-        <ProCard
-          colSpan={13}
-          bordered
-          title={`${dataType === DataType.All ? '全部' : '今日'}门店预约`}
-          extra={
-            <Space>
-              <Button
-                key="tody"
-                onClick={() => onDataTypeChange(DataType.Today)}
-                type={dataType === DataType.Today ? 'primary' : undefined}
-              >
-                今日预约
-              </Button>
-              <Button
-                key="all"
-                onClick={() => onDataTypeChange(DataType.All)}
-                type={dataType === DataType.All ? 'primary' : undefined}
-              >
-                全部预约
-              </Button>
-            </Space>
-          }
-        >
-          <ProTable
-            actionRef={appointmentRef}
-            rowKey="id"
-            request={fetchAppointmentList}
-            options={false}
-            columns={columns2}
-            search={false}
-            ghost
-          />
-        </ProCard>
-
-        <ProCard colSpan={11} bordered title="去预约">
-          <ProForm
-            form={form}
-            grid
-            submitter={{
-              resetButtonProps: {
-                style: {
-                  display: 'none',
-                },
-              },
-              onSubmit: async () => {
-                const values = await form.validateFields();
-                createAppointment({
-                  ...values,
-                  appointment_time: values.appointment_time.toDate(),
-                });
-                message.success('预约成功');
-                form.resetFields();
-                setTimeout(() => {
-                  appointmentRef?.current?.reload();
-                }, 1000);
-              },
-            }}
-          >
-            <FormCustomerSelect
-              colProps={{ span: 24 }}
-              name="customer_id"
-              label="会员卡号"
-              rules={[{ required: true, message: '请选择客户' }]}
-              placeholder="请选择或新建客户"
-            />
-            <ProForm.Item
-              name="service_items"
-              label="服务项目"
-              rules={[
-                {
-                  required: true,
-                  message: '请选择服服务项目',
-                },
-              ]}
+      <ProCard
+        colSpan={24}
+        bordered
+        title={`${dataType === DataType.All ? '全部' : '今日'}门店预约`}
+        extra={
+          <Space size={4}>
+            <Button type="primary" icon={<PhoneOutlined />} onClick={() => {
+              updateModalStatus(ModalType.Appointment, true)
+            }}>
+              预约管理
+            </Button>
+            <Button type="primary" icon={<HighlightOutlined />} onClick={() => {
+              updateModalStatus(ModalType.ServiceRegistration, true)
+            }}>
+              服务登记
+            </Button>
+            <Button type="primary" icon={<AuditOutlined />} onClick={() => {
+              updateModalStatus(ModalType.CouponsManage, true)
+            }}>
+              开卡管理
+            </Button>
+            <Button
+              key="tody"
+              onClick={() => onDataTypeChange(DataType.Today)}
+              type='primary'
             >
-              <ProTable
-                rowKey="id"
-                options={false}
-                ghost
-                request={fetchStoreList}
-                columns={columns}
-                search={false}
-                rowSelection={{
-                  type: 'checkbox',
-                  onChange: (ids) => {
-                    form.setFieldsValue({
-                      service_items: ids,
-                    });
-                  },
-                }}
-                pagination={false}
-              />
-            </ProForm.Item>
-            <ProForm.Group>
-              <ProFormSelect
-                colProps={{ span: 12 }}
-                name="service_mode"
-                label="服务方式"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择服务方式',
-                  },
-                ]}
-                options={[
-                  {
-                    label: '上门',
-                    value: 'home',
-                  },
-                  {
-                    label: '到店',
-                    value: 'store',
-                  },
-                ]}
-              />
-              <ProFormDateTimePicker
-                colProps={{ span: 12 }}
-                name="appointment_time"
-                label="预约时间"
-                dataFormat="'YYYY-MM-DD HH:mm:ss"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择预约时间',
-                  },
-                ]}
-                fieldProps={{
-                  showTime: {
-                    format: 'HH:mm',
-                  },
-                  disabledDate: (current) => current && current < dayjs().startOf('day'),
-                }}
-              />
-            </ProForm.Group>
-            <ProForm.Group>
-              <FormStoreSelect
-                colProps={{ span: 12 }}
-                name="org_id"
-                label="服务门店"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择门店',
-                  },
-                ]}
-              />
-              <ProFormSelect
-                colProps={{ span: 12 }}
-                name="appointment_method"
-                options={[
-                  {
-                    label: '门店',
-                    value: 'store',
-                  },
-                  {
-                    label: '电话',
-                    value: 'phone',
-                  },
-                  {
-                    label: '微信',
-                    value: 'wechat',
-                  },
-                ]}
-                label="预约方式"
-              />
-            </ProForm.Group>
-            <ProForm.Group>
-              <FormStaffSelect
-                colProps={{ span: 12 }}
-                name="appointment_teacher"
-                label="预约老师"
-                rules={[
-                  {
-                    required: true,
-                    message: '请选择预约老师',
-                  },
-                ]}
-              />
-              <ProFormText colProps={{ span: 12 }} name="remark" label="预约备注" />
-            </ProForm.Group>
-          </ProForm>
-        </ProCard>
+              今日预约
+            </Button>
+            <Button
+              key="all"
+              onClick={() => onDataTypeChange(DataType.All)}
+              type='primary'
+            >
+              全部预约
+            </Button>
+          </Space>
+        }
+      >
+        <ProTable
+          actionRef={appointmentRef}
+          rowKey="id"
+          request={fetchAppointmentList}
+          options={false}
+          columns={columns2}
+          search={false}
+          ghost
+        />
       </ProCard>
+
+      {modalStatus.appointmentOpen && <AppointmentModal
+        {...ModalStyles}
+        open={modalStatus.appointmentOpen}
+        onCancel={() => updateModalStatus('appointment', false)}
+      />}
+      {modalStatus.couponsManageOpen && <CouponsManageModal
+        {...ModalStyles}
+        open={modalStatus.couponsManageOpen}
+        onCancel={() => updateModalStatus(ModalType.CouponsManage, false)}
+      />}
+      {modalStatus.serviceRegistrationOpen && <ServiceRegistrationModal
+        {...ModalStyles}
+        open={modalStatus.serviceRegistrationOpen}
+        onCancel={() => updateModalStatus(ModalType.ServiceRegistration, false)}
+      />}
     </PageContainer>
   );
 };
