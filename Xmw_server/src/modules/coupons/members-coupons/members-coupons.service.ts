@@ -86,7 +86,7 @@ export class MembersCouponsService {
     }
     const res = await this.membersCouponsModel.findAll({
       ...where,
-      order: [['created_time', 'desc']],
+      order: [['id', 'desc']],
       attributes: {
         include: [
           's.store_name',

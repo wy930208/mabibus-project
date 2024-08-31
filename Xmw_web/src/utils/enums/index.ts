@@ -20,7 +20,7 @@ export enum REQUEST_METHODS {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
-  PATCH = 'PATCH'
+  PATCH = 'PATCH',
 }
 
 /**
@@ -30,8 +30,7 @@ export enum REQUEST_METHODS {
 export enum BASEURL {
   // API = '/api'
   // API = 'http://localhost:6688/v1',
-  API = 'http://www.mommybus.site:3000/v1'
-  
+  API = 'http://www.mommybus.site:3000/v1',
 }
 
 /**
@@ -64,7 +63,7 @@ export enum ROUTES {
   INTERNATIONALIZATION = '/system/internationalization', // 系统设置-国际化
   OPERATIONLOG = '/system/operation-log', // 系统设置-操作日志
   STORE_MANAGEMENT = '/store/list', // 店铺管理
-  CUSTOMER_MANAGEMENT = '/customer/management' 
+  CUSTOMER_MANAGEMENT = '/customer/management',
 }
 
 /**
@@ -96,7 +95,7 @@ export enum INTERNATION {
   FLAG_NO = 'global.flag.no', // 否
   POPCONFIRM_TITLE = 'global.popconfirm.title', // 确认执行此操作吗？
   BASICLAYOUT = 'components.BasicLayout', // 布局组件
-  UPLOADIMAGE = 'components.UploadImage'
+  UPLOADIMAGE = 'components.UploadImage',
 }
 
 /**
@@ -187,7 +186,7 @@ export enum TARGET_TYPE {
   BLANK = '_blank',
   SELF = '_self',
   PARENT = '_parent',
-  TOP = '_top'
+  TOP = '_top',
 }
 
 /**
@@ -240,3 +239,21 @@ export enum TABSLAYOUT {
   LEFT = 'left', // 关闭左侧
   OTHERS = 'others', // 关闭其它
 }
+
+
+
+interface A {
+  [k: string]: number;
+}
+
+type B = {
+  title?: number;
+}
+
+const a: B = {};
+
+let b: A = { 'title': 11 };
+
+b = a
+
+console.log(a, b);

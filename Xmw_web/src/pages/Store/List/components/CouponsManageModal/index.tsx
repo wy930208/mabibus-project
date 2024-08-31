@@ -4,7 +4,6 @@ import {
 import { Form, message, Modal, ModalProps, Table } from 'antd';
 import { FC, useEffect, useMemo, useState } from 'react';
 
-import FormCouponsSelect from '@/components/FormCouponsSelect';
 import FormCustomerSelect from '@/components/FormCustomerSelect';
 import FormStaffSelect from '@/components/FormStaffSelect';
 import { fetchCoupons } from '@/services/coupons';
@@ -39,8 +38,19 @@ const CouponsManageModal: FC<ModalProps> = (props) => {
   }, []);
 
   const tableData = useMemo(() => {
-    return dataSource?.filter((row) => selectedCoupons?.includes(row.id))
+    return dataSource?.reduce((acc, o) => {
+      if (selectedCoupons?.includes(o.id)) {
+        acc.dataSource.push(o);
+        acc.totalAmount += o.sale_price
+      }
+      return acc;
+    }, {
+      dataSource: [],
+      totalAmount: 0,
+    })
   }, [dataSource, selectedCoupons])
+
+  console.log('===tableData==', tableData);
 
   const opt = useMemo(() => {
     return dataSource?.map((u) => ({
@@ -49,7 +59,7 @@ const CouponsManageModal: FC<ModalProps> = (props) => {
     }));
   }, [dataSource])
 
-  return <Modal title="开卡管理" {...props} onOk={async () => {
+  return <Modal title="销售收款" {...props} onOk={async () => {
     await onSubmit();
     props?.onCancel?.(undefined as any);
   }}>
@@ -104,7 +114,10 @@ const CouponsManageModal: FC<ModalProps> = (props) => {
             ellipsis: true,
           },
         ]}
-        dataSource={tableData}
+        bordered
+        pagination={false}
+        style={{ marginBottom: 24 }}
+        dataSource={tableData?.dataSource}
       />
       <ProForm.Group>
         <ProFormSelect
@@ -126,7 +139,14 @@ const CouponsManageModal: FC<ModalProps> = (props) => {
             },
           ]}
         />
-        <ProFormDigit min={0} colProps={{ span: 12 }} name="sale_amount" label="付款金额" />
+        <ProFormDigit
+          // @ts-ignore
+          value={tableData?.totalAmount}
+          min={0}
+          colProps={{ span: 12 }}
+          name="sale_amount"
+          label="付款金额"
+        />
       </ProForm.Group>
       <ProForm.Group>
         <FormStaffSelect colProps={{ span: 12 }} name="sales" label="业绩归属" />

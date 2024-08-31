@@ -10,7 +10,7 @@ import CustomerCouponsList from '@/components/CustomerCouponsList';
 import FormCouponsSelect from '@/components/FormCouponsSelect';
 import FormCustomerSelect from '@/components/FormCustomerSelect';
 import FormStaffSelect from '@/components/FormStaffSelect';
-import { fetchCouponsMembersCoupons } from '@/services/coupons';
+import { fetchCoupons, fetchCouponsMembersCoupons } from '@/services/coupons';
 import { createSaleOrder } from '@/services/sales';
 import { getUserList } from '@/services/system/user-management';
 
@@ -31,17 +31,13 @@ const ServiceRegistrationModal: FC<ModalProps> = (props) => {
 
   const [customerId, setCustomerId] = useState<string | undefined>();
 
-  const { data } = useRequest(() => {
-    return customerId
-      ? fetchCouponsMembersCoupons(undefined, customerId).then((resp) => resp.data)
-      : Promise.resolve([])
-  }, {
-    refreshDeps: [customerId],
-  });
+  const { data } = useRequest(() => fetchCoupons().then((resp) => resp.data));
+
+  console.log('===data===', data);
 
   const selectOpt = useMemo(() => {
     return data?.map((u) => ({
-      label: `${u.coupon_name}-[编号${u.id}]`,
+      label: u.coupon_name,
       value: u.id,
       source: u,
     }));
@@ -118,8 +114,9 @@ const ServiceRegistrationModal: FC<ModalProps> = (props) => {
             name="product_items"
             label="本次服务项目"
             required
+            disabled={!customerId}
           />
-          <Table size="small" bordered columns={[
+          <Table style={{ marginBottom: 24}} size="small" pagination={false} bordered columns={[
             {
               title: '服务项目',
               dataIndex: 'coupon_name',
@@ -131,18 +128,6 @@ const ServiceRegistrationModal: FC<ModalProps> = (props) => {
               ellipsis: true,
               render: (_, record) => {
                 return record.coupon_type === 'times' ?
-                  <Form.Item className={style.formItem} required name={`count_${record.id}`}>
-                    <InputNumber min={1} max={record.remaining_times} defaultValue={1} style={{ width: '100%' }} />
-                  </Form.Item>
-                  : '无'
-              },
-            },
-            {
-              title: '核销金额',
-              dataIndex: 'sale_price',
-              ellipsis: true,
-              render: (_, record) => {
-                return record.coupon_type === 'prepaid' ?
                   <Form.Item className={style.formItem} required name={`count_${record.id}`}>
                     <InputNumber min={1} max={record.remaining_times} defaultValue={1} style={{ width: '100%' }} />
                   </Form.Item>
