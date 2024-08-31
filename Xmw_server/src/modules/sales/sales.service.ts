@@ -102,7 +102,7 @@ export class SalesService {
         belongs_store: { [Op.in]: orgIdList },
       },
       attributes: {
-        include: [[Sequelize.col('u.user_name'), 'sale_name']],
+        include: [[Sequelize.col('u.cn_name'), 'sale_name']],
       },
       include: [
         {
