@@ -1,12 +1,3 @@
-/*
- * @Description: 接口数据类型定义
- * @Version: 2.0
- * @Author: 白雾茫茫丶
- * @Date: 2022-09-23 10:23:23
- * @LastEditors: 白雾茫茫丶
- * @LastEditTime: 2023-10-07 14:24:23
- */
-
 import type { CommonTypes, Flag, Langs, RequestMethods, TableTimes } from '@/utils/types'
 import type { AnnouncementType } from '@/utils/types/administrative/announcement'
 import type { OrgTypes } from '@/utils/types/administrative/organization'

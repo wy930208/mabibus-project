@@ -3,7 +3,6 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components'
-import { useRequest } from '@umijs/max';
 import { FC, useMemo, useRef } from 'react';
 
 import { columnScrollX } from '@/components/TableColumns';
@@ -12,9 +11,6 @@ import { getSalesDetail } from '@/services/sales';
 const StoreIncome: FC = () => {
   const tableRef = useRef<ActionType>();
 
-  const { data: saleData } = useRequest(getSalesDetail);
-
-  console.log('===saleData===', saleData);
 
   const columns: any[] = useMemo(() => {
     return [

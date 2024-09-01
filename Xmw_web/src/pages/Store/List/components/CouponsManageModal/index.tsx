@@ -37,6 +37,7 @@ const CouponsManageModal: FC<ModalProps> = (props) => {
     })
   }, []);
 
+
   const tableData = useMemo(() => {
     return dataSource?.reduce((acc, o) => {
       if (selectedCoupons?.includes(o.id)) {
@@ -48,16 +49,20 @@ const CouponsManageModal: FC<ModalProps> = (props) => {
       dataSource: [],
       totalAmount: 0,
     })
-  }, [dataSource, selectedCoupons])
-
-  console.log('===tableData==', tableData);
+  }, [dataSource, selectedCoupons]);
 
   const opt = useMemo(() => {
     return dataSource?.map((u) => ({
       label: u.coupon_name,
       value: u.id,
     }));
-  }, [dataSource])
+  }, [dataSource]);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      sale_amount: tableData?.totalAmount,
+    })
+  }, [form, tableData?.totalAmount])
 
   return <Modal title="销售收款" {...props} onOk={async () => {
     await onSubmit();

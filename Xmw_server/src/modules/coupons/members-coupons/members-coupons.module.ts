@@ -3,6 +3,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 
 import { Coupons } from '@/models/coupons.model';
 import { MembersCoupons } from '@/models/members_coupons.model';
+import { ServiceRegistration } from '@/models/service_registration.model';
 import { WriteOffCouponsLog } from '@/models/write_off_coupons_log.model';
 import { XmwOrganization } from '@/models/xmw_organization.model';
 import { OrganizationService } from '@/modules/administrative/organization/organization.service';
@@ -19,6 +20,7 @@ import { MembersCouponsService } from './members-coupons.service';
       Coupons,
       XmwOrganization,
       WriteOffCouponsLog,
+      ServiceRegistration,
     ]),
   ],
   controllers: [MembersCouponsController],

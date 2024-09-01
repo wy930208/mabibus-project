@@ -82,7 +82,6 @@ const StoreManagement: FC = () => {
   }, [appointmentData]);
 
 
-  console.log('====timeLines===', staffData, dataSource);
 
   const columns2: ProColumns<any>[] = useMemo(() => {
     const col: ProColumns<any>[] = [

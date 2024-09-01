@@ -1,7 +1,8 @@
-import { PageContainer } from '@ant-design/pro-components';
+import { PageContainer, ProCard } from '@ant-design/pro-components';
 import { Space } from 'antd'
 import { FC } from 'react';
 
+import ServiceRegistration from '../ServiceRegistration';
 import StoreIncome from '../StoreIncome';
 import RenderContent from './components/RenderContent' // 顶部布局
 
@@ -53,18 +54,26 @@ const Workbench: FC = () => {
   //     }
   //   }),
   // });
- 
+
   return (
     <PageContainer content={<RenderContent />}>
       <Space direction="vertical" size="middle" style={{ display: 'flex', marginTop: 16 }}>
-        {/* 指标卡片 */}
-        <div style={{ marginTop: '-12px' }} >
-          {/* <StatisticChart {...data} /> */}
-          <StoreIncome />
-        </div>
+        <ProCard
+          tabs={{
+            type: 'card',
+          }}
+        >
+          <ProCard.TabPane key="tab1" tab="销售统计">
+            <StoreIncome />
+          </ProCard.TabPane>
+          <ProCard.TabPane key="tab2" tab="手工统计">
+            <ServiceRegistration />
+          </ProCard.TabPane>
+        </ProCard>
+       
       </Space>
 
-      
+
     </PageContainer>
   )
 }

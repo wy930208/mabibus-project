@@ -65,8 +65,6 @@ export class SalesService {
     const orgIdList =
       await this.organizationService.getSelfAndChildrenOrgId(org_id);
 
-    console.log('===orgIdList====', org_id, orgIdList);
-
     const membersCoupons = await this.membersCouponsModel.findAll({
       attributes: {
         include: [

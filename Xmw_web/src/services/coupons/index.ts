@@ -51,3 +51,17 @@ export const deleteMemberCoupon = (id: string) => httpRequest.delete(`/members-c
  * @description: 获取会员卡券日志
  */
 export const fetchCouponsMembersLogs = () => httpRequest.get<string[]>('/members-coupons/logs');
+
+/**
+ * 使用卡券
+ * @param data 
+ * @returns 
+ */
+export const couponsUse = (data: any) => httpRequest.post<string[]>('/members-coupons/use-coupons', data);
+
+/**
+ * 使用卡券
+ * @param data 
+ * @returns 
+ */
+export const getCouponsUse = () => httpRequest.get('/members-coupons/use-coupons');

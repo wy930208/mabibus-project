@@ -29,8 +29,8 @@ export enum REQUEST_METHODS {
  */
 export enum BASEURL {
   // API = '/api'
-  // API = 'http://localhost:6688/v1',
-  API = 'http://www.mommybus.site:3000/v1',
+  API = 'http://localhost:6688/v1',
+  // API = 'http://www.mommybus.site:3000/v1',
 }
 
 /**

@@ -47,4 +47,14 @@ export class MembersCouponsController {
   findWriteOffLog(@Session() session: SessionTypes) {
     return this.membersCouponsService.findWriteOffLog(session);
   }
+
+  @Post('use-coupons')
+  useCoupons(@Body() dto) {
+    return this.membersCouponsService.useCoupons(dto);
+  }
+
+  @Get('use-coupons')
+  findAllUseCoupons() {
+    return this.membersCouponsService.findAllUseCoupons();
+  }
 }

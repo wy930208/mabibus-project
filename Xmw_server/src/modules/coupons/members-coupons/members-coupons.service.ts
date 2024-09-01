@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { groupBy, keyBy, map } from 'lodash';
 import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
 import { Coupons } from '@/models/coupons.model';
 import { Customer } from '@/models/customer.model';
 import { MembersCoupons } from '@/models/members_coupons.model';
+import { ServiceRegistration } from '@/models/service_registration.model';
 import { Store } from '@/models/store.model';
 import { WriteOffCouponsLog } from '@/models/write_off_coupons_log.model';
+import { XmwOrganization } from '@/models/xmw_organization.model';
 import { XmwUser } from '@/models/xmw_user.model';
 import { OrganizationService } from '@/modules/administrative/organization/organization.service';
 import { responseMessage } from '@/utils';
@@ -27,6 +30,9 @@ export class MembersCouponsService {
 
     @InjectModel(Coupons)
     private readonly couponsModel: typeof Coupons,
+
+    @InjectModel(ServiceRegistration)
+    private readonly serviceRegistrationModel: typeof ServiceRegistration,
 
     private readonly organizationService: OrganizationService,
     private sequelize: Sequelize,
@@ -200,8 +206,6 @@ export class MembersCouponsService {
         transaction,
       });
 
-      console.log('====logPayload===', logPayload);
-
       await this.writeOfLogModel.create(logPayload, {
         transaction,
       });
@@ -280,5 +284,133 @@ export class MembersCouponsService {
     return responseMessage(
       result?.filter((record) => orgIdList.includes((record as any).org_id)),
     );
+  }
+
+  async useCoupons(dto) {
+    const { customer_id, product_items, useCoupons } = dto;
+
+    // 查处客户名下的卡券
+    const couponsData = await this.membersCouponsModel.findAll({
+      where: {
+        customer_id,
+        coupons_id: {
+          [Op.in]: product_items,
+        },
+        remaining_times: {
+          [Op.gt]: 0,
+        },
+      },
+      raw: true,
+    });
+
+    if (!couponsData[0]) return responseMessage(null, '余额不足,无法扣减', 500);
+
+    const couponsDataMap = groupBy(couponsData, 'coupons_id');
+
+    let verifySuccess = true;
+
+    // 按顺序核销、减计次数、更新到数据库
+    const deductData: any[] = useCoupons.map((useCouponItem) => {
+      const { count } = useCouponItem;
+      const list = couponsDataMap[useCouponItem.id];
+
+      const processData = [];
+      // 待扣除次数
+      let remainDeductCount = count;
+
+      let index = 0;
+
+      while (!!(remainDeductCount > 0 && list[index])) {
+        const currentItem = list[index];
+        // 剩余次数
+        const remain = currentItem.remaining_times - remainDeductCount;
+
+        // 当前刚好够扣除
+        if (remain >= 0) {
+          remainDeductCount = 0;
+          // 卡剩余次数为 remain
+          processData.push({
+            ...currentItem,
+            remaining_times: remain,
+            update_time: undefined,
+          });
+        } else {
+          remainDeductCount = Math.abs(remain);
+          //  卡剩余次数为 0
+          processData.push({
+            ...currentItem,
+            remaining_times: 0,
+            update_time: undefined,
+          });
+        }
+
+        // 继续遍历下一项
+        index += 1;
+      }
+
+      if (remainDeductCount > 0) {
+        verifySuccess = false;
+      }
+
+      return processData;
+    });
+
+    if (!verifySuccess) return responseMessage(null, '余额不足,无法扣减', 500);
+
+    await this.membersCouponsModel.bulkCreate(deductData.flat(), {
+      updateOnDuplicate: ['remaining_times'],
+    });
+
+    // 插入服务登记的记录
+    await this.serviceRegistrationModel.create({
+      service_items: dto.useCoupons,
+      payment_method: dto.payment_method,
+      amount: dto.payment_amount,
+      remark: dto.remark,
+      customer_id: dto.customer_id,
+      store_id: dto.store_id,
+    });
+
+    return responseMessage(deductData);
+  }
+
+  async findAllUseCoupons() {
+    const coupons = await this.couponsModel.findAll({
+      raw: true,
+    });
+    const couponsMap = keyBy(coupons, 'id');
+    const res = await this.serviceRegistrationModel.findAll({
+      attributes: {
+        include: [
+          [Sequelize.col('c.user_name'), 'customer_name'],
+          'o.org_name',
+        ],
+      },
+      include: [
+        {
+          model: Customer,
+          as: 'c',
+          attributes: [],
+        },
+        {
+          model: XmwOrganization,
+          as: 'o',
+          attributes: [],
+        },
+      ],
+      raw: true,
+    });
+    const newRes = res.map((item) => {
+      return {
+        ...item,
+        service_items: item.service_items.map((o) => {
+          return {
+            ...o,
+            ...couponsMap[o.id],
+          };
+        }),
+      };
+    });
+    return responseMessage(newRes);
   }
 }

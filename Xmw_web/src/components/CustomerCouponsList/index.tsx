@@ -36,7 +36,6 @@ const CustomerCouponsList: FC<{ customerId: string }> = ({
     });
   }, [data]);
 
-// console.log('=====data1====', formattedData);
 
 return <Table
   pagination={false}
